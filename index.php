@@ -1,4 +1,6 @@
-<?php require_once('header.php');
+<?php
+    $exportvisible = true; 
+    require_once('header.php');
 
 	$mode = "all";
 	$title = "All Passwords Available To Me";
@@ -8,10 +10,10 @@
 				<table class="table table-hover">
 					<thead>
 						<tr>
-							<th class="col-xs-2">Name</th>
-							<th class="col-xs-3">User name</th>
-							<th class="col-xs-5">Notes</th>
-							<th class="col-xs-2">Actions</th>
+							<th class="col-xs-2"><?php echo _("Name"); ?></th>
+							<th class="col-xs-2"><?php echo _("User name"); ?></th>
+							<th class="col-xs-3"><?php echo _("Notes"); ?></th>
+							<th class="col-xs-3"><?php echo _("Actions"); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -33,12 +35,12 @@ function show_password($gid, $level) {
 								<td><?php echo $login; ?></td>
 								<td><?php echo $notes; ?></td>
 								<td>
-									<a class="btn btn-primary btn-xs" href="show.php?id=<?php echo $id;?>">Show</a>
+									<a class="btn btn-primary btn-xs" href="show.php?id=<?php echo $id;?>"><?php echo _("Show"); ?></a>
 									<?php if (($myRights & accPasswordEdit) != 0) { ?>
-										<a class="btn btn-primary btn-xs" href="edit.php?id=<?php echo $id;?>">Edit</a>
+										<a class="btn btn-primary btn-xs" href="edit.php?id=<?php echo $id;?>"><?php echo _("Edit"); ?></a>
 									<?php } ?>
 									<?php if (($myRights & accPasswordRemove) != 0) { ?>
-										<a class="btn btn-danger btn-xs" href="delete.php?id=<?php echo $id;?>">Delete</a>
+										<a class="btn btn-danger btn-xs" href="delete.php?id=<?php echo $id;?>"><?php echo _("Delete"); ?></a>
 									<?php } ?>
 								</td>
 							</tr>

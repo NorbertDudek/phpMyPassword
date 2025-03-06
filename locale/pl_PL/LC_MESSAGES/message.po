@@ -28,3 +28,132 @@ msgstr "Dodaj"
 
 msgid "Export"
 msgstr "Eksport"
+
+msgid "Users"
+msgstr "Użytkownicy"
+
+msgid "Logout"
+msgstr "Wyloguj"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "User name"
+msgstr "Nazwa użytkownika"
+
+msgid "Notes"
+msgstr "Notatka"
+
+msgid "Actions"
+msgstr "Akcje"
+
+msgid "Logged in as:"
+msgstr "Zalogowany jako:"
+
+msgid "Group Name"
+msgstr "Nazwa grupy"
+
+msgid "Add new group"
+msgstr "Dodaj nową grupę"
+
+msgid "Edit"
+msgstr "Zmień"
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "Show"
+msgstr "Pokaż"
+
+msgid "Add Password"
+msgstr "Dodawanie hasła"
+
+msgid "Parent"
+msgstr "Grupa nadrzędna"
+
+msgid "Confirm deletion"
+msgstr "Potwierdź usunięcie"
+
+msgid "Please confirm you would like to remove the password object"
+msgstr "Potwierdź, że chcesz usunąć obiekt hasła"
+
+msgid "Confirm"
+msgstr "Potwierdź"
+
+msgid "Edit this object"
+msgstr "Zmień ten obiekt"
+
+msgid "Delete this object"
+msgstr "Usuń ten obiekt"
+
+msgid "Copy to clipboard"
+msgstr "Kopiuj do schowka"
+
+msgid "Save changes"
+msgstr "Zapisz zmiany"
+
+msgid "Edit object"
+msgstr "Edycja obiektu"
+
+msgid "Add group"
+msgstr "Dodawanie grupy"
+
+msgid "Edit group"
+msgstr "Edycja grupy"
+
+msgid "Shared users"
+msgstr "Współdzieleni użytkownicy"
+
+msgid "Add user(s)"
+msgstr "Dodaj użytkowników"
+
+msgid "Remove selected user(s)"
+msgstr "Usuń wybranych użytkowników"
+
+msgid "Shared groups"
+msgstr "Współdzielone grupy"
+
+msgid "Add group(s)"
+msgstr "Dodaj grupy"
+
+msgid "Remove selected group(s)"
+msgstr "Usuń wybrane grupy"
+
+msgid "This will also remove all group membership records and permissions."
+msgstr "Spowoduje to również usunięcie wszystkich rekordów członkostwa w grupie i uprawnień."
+
+msgid "Please confirm you would like to remove the following group"
+msgstr "Potwierdź chęć usunięcia następującej grupy"
+
+msgid "Confirm removal"
+msgstr "Potwierdź usunięcie"
+
+msgid "Please confirm you would like to remove the following users"
+msgstr "Potwierdź, że chcesz usunąć następujących użytkowników"
+
+msgid "Users will no longer be able to view the following object"
+msgstr "Użytkownicy nie będą już mogli przeglądać następującego obiektu"
+
+msgid "Share with user"
+msgstr "Współdziel z użytkownikiem"
+
+msgid "Select a user"
+msgstr "Wybierz użytkownika"
+
+msgid "Use CTRL+Click to select multiple users."
+msgstr "Użyj CTRL+Click, aby zaznaczyć wielu użytkowników."
+
+msgid "Share"
+msgstr "Współdziel"
+
+msgid "Share with group"
+msgstr "Współdziel z grupą"
+
+msgid "Select a group"
+msgstr "Wybierz grupę"
+
+msgid "Use CTRL+Click to select multiple groups."
+msgstr "Użyj CTRL+Click, aby zaznaczyć wiele grup."
+
+msgid "Users belonging to these groups will no longer be able to view the following object"
+msgstr "Użytkownicy należący do tych grup nie będą już mogli przeglądać następującego obiektu"

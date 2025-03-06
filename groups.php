@@ -4,13 +4,13 @@ require_once('header.php');
 require_once('resources/stack.php');
 ?>
 
-<h2>Groups:</h2>
+<h2><?php echo _("Groups"); ?>:</h2>
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th>Group Name</th>
-			<th>Description</th>
-			<th>Actions</th>
+			<th><?php echo _("Group Name"); ?></th>
+			<th><?php echo _("Notes"); ?></th>
+			<th><?php echo _("Actions"); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,10 +26,10 @@ function echoGroup($level, $name, $description, $gid)  {
 				<td><?php echo $description;?></td>
 				<td>
 					<?php if (($myRights & accGroupEdit) != 0) { ?>
-						<a href="edit_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-primary">Edit</a>
+						<a href="edit_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-primary"><?php echo _("Edit"); ?></a>
 					<?php } ?>
 					<?php if (($myRights & accGroupRemove) != 0) { ?>
-						<a href="delete_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-danger">Delete</a>
+						<a href="delete_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-danger"><?php echo _("Delete"); ?></a>
 					<?php } ?>
 				</td>
 			</tr>
@@ -63,7 +63,7 @@ list_groups(0);
 
 	</tbody>
 </table>
-<div><a href="add_group.php" class="btn btn-sm btn-primary">Add New Group</a></div>
+<div><a href="add_group.php" class="btn btn-sm btn-primary"><?php echo _("Add new group"); ?></a></div>
 
 <?php
 require_once('footer.php');

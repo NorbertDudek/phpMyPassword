@@ -25,21 +25,21 @@ else {
 	<div class="col-sm-3">&nbsp;</div>
 	<div class="col-sm-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading"><strong>Edit object:</strong> <?php echo $name;?></div>
+			<div class="panel-heading"><strong><?php echo _("Edit object"); ?>:</strong> <?php echo $name;?></div>
 			<div class="panel-body">
 
 				<form action="do_edit.php" class="form-horizontal" method="POST">
 					<input type="hidden" name="id" value="<?php echo $id; ?>">
 					<div class="form-group">
-						<label for="name" class="col-sm-3 control-label">Name:</label>
+						<label for="name" class="col-sm-3 control-label"><?php echo _("Name"); ?>:</label>
 						<div class="col-sm-9"><input type="text" class="form-control" name="name" maxlength="256" value="<?php echo $name;?>"></div>
 					</div>
 					<div class="form-group">
-						<label for="login" class="col-sm-3 control-label">Login:</label>
+						<label for="login" class="col-sm-3 control-label"><?php echo _("User name"); ?>:</label>
 						<div class="col-sm-9"><input type="text" class="form-control" name="login" maxlength="256" value="<?php echo $login; ?>"></div>
 					</div>
 					<div class="form-group">
-						<label for="group" class="col-sm-3 control-label">Group:</label>
+						<label for="group" class="col-sm-3 control-label"><?php echo _("Group"); ?>:</label>
 						<div class="col-sm-9"><select class="form-control" name="group">
 						<?php
 							echo get_group_options(0, $group);
@@ -47,16 +47,16 @@ else {
 						</select></div>
 					</div>
 					<div class="form-group">
-						<label for="password" class="col-sm-3 control-label">Password:</label>
+						<label for="password" class="col-sm-3 control-label"><?php echo _("Password"); ?>:</label>
 						<div class="col-sm-9"><input type="password" class="form-control" name="password" maxlength="256" value="<?php echo $password; ?>"></div>
 					</div>
 					<div class="form-group">
-						<label for="note" class="col-sm-3 control-label">Note:</label>
+						<label for="note" class="col-sm-3 control-label"><?php echo _("Notes"); ?>:</label>
 						<div class="col-sm-9"><textarea class="form-control" name="note" rows="4"><?php echo $note; ?></textarea></div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3"></div>
-						<div class="col-sm-9"><input type="submit" class="btn btn-sm btn-primary" value="Save Changes"></div>
+						<div class="col-sm-9"><input type="submit" class="btn btn-sm btn-primary" value="<?php echo _("Save changes"); ?>"></div>
 					</div>
 					<div class="col-sm-12">&nbsp;</div>
 				</form>

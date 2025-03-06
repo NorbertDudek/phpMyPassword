@@ -142,7 +142,7 @@ textdomain($domain);
 						?>
 						
 						<?php
-						if (($myRights & accExport) != 0)
+						if ((($myRights & accExport) != 0) and (isset($exportvisible)))
 						{
 						?>
 						<li><a href="export.php"><?php echo _("Export"); ?></a></li>
@@ -160,11 +160,11 @@ textdomain($domain);
 							</ul>
 						</li>
 						<?php } ?>
-						<li><a href="logout.php">Logout</a></li>
+						<li><a href="logout.php"><?php echo _("Logout"); ?></a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 		
 		<div class="container">
-			<p class="text-right">Logged in as: <?php echo get_login(get_my_uid()); ?></p>
+			<p class="text-right"><?php echo _("Logged in as:")." "; echo get_login(get_my_uid()); ?></p>

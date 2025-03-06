@@ -16,18 +16,18 @@ else {
 	<div class="col-sm-3">&nbsp;</div>
 	<div class="col-sm-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading"><strong>Confirm Deletion</strong></div>
+			<div class="panel-heading"><strong><?php echo _("Confirm deletion"); ?></strong></div>
 			<div class="panel-body">
 
 				<form action="do_delete_group.php" method="POST">
 					<input type="hidden" name="gid" value="<?php echo $gid;?>">
 					
-					<div>Please confirm you would like to remove the following group:</div>
+					<div><?php echo _("Please confirm you would like to remove the following group"); ?>:</div>
 					<ul>
 						<li><?php echo get_group_name($gid); ?>
 					</ul>
-					<p class="bg-warning"><small><em>This will also remove all group membership records and permissions.</em></small></p>
-					<div><input type="submit" class="btn btn-sm btn-primary" value="Confirm"></div>
+					<p class="bg-warning"><small><em><?php echo _("This will also remove all group membership records and permissions."); ?></em></small></p>
+					<div><input type="submit" class="btn btn-sm btn-primary" value="<?php echo _("Confirm"); ?>"></div>
 				</form>
 			</div>
 		</div>

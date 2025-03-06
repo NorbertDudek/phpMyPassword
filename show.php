@@ -63,36 +63,36 @@ else {
 
 	<table class="table table-hover">
 		<tr>
-			<td class="col-xs-2">Name:</td>
+			<td class="col-xs-2"><?php echo _("Name"); ?>:</td>
 			<td class="col-xs-6"><?php echo $name; ?></td>
 			<td class="col-xs-2"></td>
 		</tr>
 		<tr>
-			<td>Group:</td>
+			<td><?php echo _("Group"); ?>:</td>
 			<td><?php echo get_group_path($group); ?></td>
 			<td></td>
 		</tr>
 		<tr>
-			<td>Login:</td>
+			<td><?php echo _("User name"); ?>:</td>
 			<td>
 				<code id="thelogin"><?php echo $login; ?></code>
 			</td>
 			<td>
-				<button onclick="CopyLoginToClibrd()" class="btn btn-sm btn-primary">Copy to clipboard</button>
+				<button onclick="CopyLoginToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
 			</td>
 			
 		</tr>
 		<tr>
-			<td>Password:</td>
+			<td><?php echo _("Password"); ?>:</td>
 			<td>
 				<code id="thepassword"><?php echo $placeholder;?></code>
 			</td>
 			<td>
-				<button onclick="CopyPasswordToClibrd()" class="btn btn-sm btn-primary">Copy to clipboard</button>
+				<button onclick="CopyPasswordToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
 			</td>
 		</tr>
 		<tr>
-			<td>Note:</td>
+			<td><?php echo _("Notes"); ?>:</td>
 			<td><?php echo string2html($note); ?></td>
 			<td></td>
 		</tr>
@@ -100,10 +100,10 @@ else {
 
 	<p>
 		<?php if (($myRights & accPasswordEdit) != 0) { ?>
-			<a href="edit.php?id=<?php echo $id; ?>"><button class="btn btn-sm btn-primary">Edit this object</button></a>
+			<a href="edit.php?id=<?php echo $id; ?>"><button class="btn btn-sm btn-primary"><?php echo _("Edit this object"); ?></button></a>
 		<?php } ?>
 		<?php if (($myRights & accPasswordRemove) != 0) { ?>
-		<a href="delete.php?id=<?php echo $id; ?>"><button class="btn btn-sm btn-danger">Delete this object</button></a>
+		<a href="delete.php?id=<?php echo $id; ?>"><button class="btn btn-sm btn-danger"><?php echo _("Delete this object"); ?></button></a>
 		<?php } ?>
 	</p>
 

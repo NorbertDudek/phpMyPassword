@@ -801,12 +801,6 @@ function sqlescape($string) {
 }
 
 
-
-
-
-
-
-
 // STRING FUNCTIONS **********************
 
 
@@ -820,13 +814,6 @@ function string2html($string) {
 	
 	return $string;
 }
-
-
-
-
-
-
-
 
 // ENCRYPTION FUNCTIONS **********************
 
@@ -954,8 +941,8 @@ function delete_password($id) {
 // FUNCTION: get_object_name($gid)
 // *****************************************
 // Returns the name of object ID
-function get_object_name($gid) {
-	return get_sql_value("SELECT name FROM groups WHERE gid=$gid");
+function get_object_name($id) {
+	return get_sql_value("SELECT name FROM data WHERE id=$id");
 	}
 
 
