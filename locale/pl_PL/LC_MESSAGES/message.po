@@ -13,3 +13,18 @@ msgstr ""
 
 msgid "Passwords"
 msgstr "Hasła"
+
+msgid "Password"
+msgstr "Hasło"
+
+msgid "Groups"
+msgstr "Grupy"
+
+msgid "Group"
+msgstr "Grupa"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Export"
+msgstr "Eksport"
