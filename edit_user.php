@@ -5,7 +5,15 @@ require_once('header.php');
 $uid = $_GET['uid'];
 $login = get_login($uid);
 $type = get_user_type($uid);
-$is_admin = get_user_permission($uid);
+$is_admin = get_user_permission($uid) & accAdmin;
+$export = get_user_permission($uid) & accExport;
+$passwordAdd = get_user_permission($uid) & accPasswordAdd;
+$passwordEdit = get_user_permission($uid) & accPasswordEdit;
+$passwordRemove = get_user_permission($uid) & accPasswordRemove;
+$groupAdd = get_user_permission($uid) & accGroupAdd;
+$groupEdit = get_user_permission($uid) & accGroupEdit;
+$groupRemove = get_user_permission($uid) & accGroupRemove;
+$groupSee = get_user_permission($uid) & accGroupSee;
 ?>
 
 <div class="row">
@@ -33,8 +41,33 @@ $is_admin = get_user_permission($uid);
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="admin">Admin?</label>
+						<label class="col-sm-3 control-label" for="admin1">Admin?</label>
 						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" name="admin" <?php if ($is_admin == 1) { echo "checked"; }?>></p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="export">Export</label>
+						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" name="export" <?php if ($export  != 0) { echo "checked"; }?>></p></div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="Password access">Password access</label>
+						<div class="col-sm-9">
+							<p class="form-control-static">
+								<input type="checkbox" name="passwordAdd" <?php if ($passwordAdd != 0) { echo "checked"; }?>> Add &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="passwordEdit" <?php if ($passwordEdit != 0) { echo "checked"; }?>> Edit &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="passwordRemove" <?php if ($passwordRemove != 0) { echo "checked"; }?>> Delete &nbsp;&nbsp;&nbsp;
+							</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="Group access">Group access</label>
+						<div class="col-sm-9">
+							<p class="form-control-static">
+								<input type="checkbox" name="groupAdd" <?php if ($groupAdd != 0) { echo "checked"; }?>> Add &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupEdit" <?php if ($groupEdit != 0) { echo "checked"; }?>> Edit &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupRemove" <?php if ($groupRemove != 0) { echo "checked"; }?>> Delete &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupSee" <?php if ($groupSee != 0) { echo "checked"; }?>> See &nbsp;&nbsp;&nbsp;
+							</p>
+						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3">&nbsp;</div>

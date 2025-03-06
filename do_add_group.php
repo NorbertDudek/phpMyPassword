@@ -7,6 +7,7 @@ $parent = $_POST['parent'];
 
 add_group($group_name, $description, $parent);
 	
+	
 header("Location: groups.php");
 
 ?>

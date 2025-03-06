@@ -12,7 +12,7 @@
 						Please confirm you would like to remove the following groups:
 						<ul>
 							<?php foreach ($_POST['shared_groups'] as $gid) { ?>
-							<li><?php echo get_group_name($gid);?></li>
+							<li><?php echo get_permissiongroup_name($gid);?></li>
 							<input type="hidden" name="gid[]" value="<?php echo $gid;?>">
 							<?php } ?>
 						</ul>

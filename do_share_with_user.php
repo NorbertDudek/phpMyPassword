@@ -11,5 +11,5 @@ foreach ($_POST['uid'] as $uid) {
 	share_with_user($id, $uid);
 	}
 
-header("location: edit.php?id=$id");
+header("location: edit_group.php?gid=$id");
 ?>

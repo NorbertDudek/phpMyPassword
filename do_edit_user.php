@@ -7,11 +7,18 @@ if (!am_i_admin()) {
 	header("location: show_permissions_error.php");
 	}
 else {
-	
 	$type = get_user_type($uid);
 	$new_password = $_POST['password'];
 	$confirm_new_password = $_POST['confirm_password'];
-	$admin = $_POST['admin'];
+	$admin = checkInPOST('admin');
+	$export = checkInPOST('export');
+	$passwordAdd = checkInPOST('passwordAdd');
+	$passwordEdit = checkInPOST('passwordEdit');
+	$passwordRemove = checkInPOST('passwordRemove');
+	$groupAdd = checkInPOST('groupAdd');
+	$groupEdit = checkInPOST('groupEdit');
+	$groupRemove = checkInPOST('groupRemove');
+	$groupSee = checkInPOST('groupSee');
 	
 	if ($type == 'local') {
 		if ($new_password != '') {
@@ -24,16 +31,33 @@ else {
 		}
 	}
 	
-	//Grant admin rights if applicable
-	if ($admin == 'on') {
-		grant_user_admin_rights($uid);
-	}
+	$accGrant = 0;
 	
-	if ($admin != 'on') {
-		remove_user_admin_rights($uid);
-		}
+	if ($admin == 'on')
+		$accGrant += accAdmin;
 	
-	}
+	if ($export == 'on')
+		$accGrant += accExport;
+	
+	if ($passwordAdd == 'on')
+		$accGrant += accPasswordAdd;
+	if ($passwordEdit == 'on')
+		$accGrant += accPasswordEdit;
+	if ($passwordRemove == 'on')
+		$accGrant += accPasswordRemove;
+
+	if ($groupAdd == 'on')
+		$accGrant += accGroupAdd;
+	if ($groupEdit == 'on')
+		$accGrant += accGroupEdit;
+	if ($groupRemove == 'on')
+		$accGrant += accGroupRemove;
+	if ($groupSee == 'on')
+		$accGrant += accGroupSee;
+
+	grant_user_rights($uid, $accGrant);
+	
+}
 	
 header("Location: admin.php");
 

@@ -4,6 +4,12 @@
 $id = $_GET['id'];
 
 
+// Check permissions
+if (!(check_object_permissions($id, get_my_uid()))) {
+	// We don't have permissions!	?>
+	<div class="bg-danger center-block">ACCESS DENIED</div>
+<?php	}
+else {
 	// Permissions are good
 	$pass_entry = get_password_object($id);
 
@@ -58,5 +64,7 @@ $id = $_GET['id'];
 		</div>
 	</div>
 </div>
+
+<?php } ?>
 
 <?php require_once('footer.php'); ?>

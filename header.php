@@ -1,5 +1,4 @@
 <?php
-
 // Redirect to install.php for initial configuration
 $expl = explode('/', $_SERVER['SCRIPT_FILENAME']);
 $expl[count($expl) - 1] = "install.php";
@@ -32,7 +31,22 @@ else {
 			}
 		}
 	}
+ 
 }
+
+$myRights = user_rights();
+
+
+/// language
+
+$language = getUserLang();
+putenv("LANG=" . $language); 
+setlocale(LC_ALL, $language);
+$domain = "message";
+bindtextdomain($domain, "locale"); 
+bind_textdomain_codeset($domain, 'UTF-8');
+
+textdomain($domain);
 ?>
 
 <!DOCTYPE html>
@@ -63,11 +77,12 @@ else {
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-6">
-						<h1>phpPassMan</h1>
+						<h1>phpPassMan</h1>Powered by <a href="https://kandisoft.pl">KANDISoft</a>
 					</div>
 					<div class="col-md-6">
+						
 						<div class="text-right">
-							<br> <img src="images/logo.png">
+							 <br><img src="images/logo.png">
 						</div>
 					</div>
 				</div>
@@ -80,7 +95,7 @@ else {
 			<div class="navbar navbar-default">
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav nav">
-						<li><a href="index.php">Passwords</a></li>
+						<li><a href="index.php"><?php echo _("Passwords"); ?></a></li>
 						<!---
 						<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Passwords <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
@@ -90,12 +105,60 @@ else {
 							</ul>
 						</li>
 						--->
-						<li><a href="groups.php">Groups</a></li>
-						<li><a href="add.php">Add</a></li>
+						<?php
+						if (($myRights & accGroupSee) != 0)
+						{
+						?>
+						<li><a href="groups.php"><?php echo _("Groups"); ?></a></li>
+						<?php
+						}
+						?>
+						
+
+						<?php
+						if (($myRights & (accPasswordAdd | accGroupAdd)) != 0)
+						{
+						?>
+						<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo _("Add"); ?><span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<?php
+								if (($myRights & accPasswordAdd) != 0)
+								{
+								?>
+								<li><a href="add.php"><?php echo _("Password"); ?></a></li>
+								<?php
+								}
+								if (($myRights & accGroupAdd) != 0)
+								{
+								?>
+								<li><a href="add_group.php"><?php echo _("Group"); ?></a></li>
+								<?php
+								}
+								?>
+							</ul>
+						</li>
+						<?php
+						}
+						?>
+						
+						<?php
+						if (($myRights & accExport) != 0)
+						{
+						?>
+						<li><a href="export.php"><?php echo _("Export"); ?></a></li>
+						<?php
+						}
+						?>
+						
 					</ul>
 					<ul class="navbar-nav nav navbar-right">
 						<?php if (am_i_admin()) { ?>
-						<li><a href="admin.php">Admin</a></li>
+						<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo _("Admin"); ?> <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="admin.php"><?php echo _("Users"); ?></a></li>
+								<li><a href="permisiongroups.php?show=mine"><?php echo _("Groups"); ?></a></li>
+							</ul>
+						</li>
 						<?php } ?>
 						<li><a href="logout.php">Logout</a></li>
 					</ul>

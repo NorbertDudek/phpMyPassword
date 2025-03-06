@@ -1,5 +1,25 @@
 <?php
 
+
+define(accAdmin, 1);
+define(accExport, 2);
+define(accPasswordAdd, 4);
+define(accPasswordEdit, 8);
+define(accPasswordRemove, 16);
+define(accGroupAdd, 32);
+define(accGroupEdit, 64);
+define(accGroupRemove, 128);
+define(accGroupSee, 256);
+
+
+$IsShowError = true;
+
+if ($IsShowError) {
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL);
+}
+
 // SESSION FUNCTIONS ***********************
 
 // *****************************************
@@ -175,13 +195,18 @@ function cleanup_old_sessions() {
 //End function
 
 
-
-
-
-
-
 // USER AND GROUP FUNCTIONS ****************
 
+// *****************************************
+// FUNCTION: add_permisiongroup($group_name, $description)
+// *****************************************
+function add_permisiongroup($group_name, $description) {
+	include("resources/config.php");
+	
+	$encoded_description = string2html($description);
+	
+	run_sql_command("INSERT INTO permisiongroups (name, description) VALUES ('$group_name', '$encoded_description')");
+}
 
 // *****************************************
 // FUNCTION: add_group($group_name, $description, $parent)
@@ -190,8 +215,9 @@ function add_group($group_name, $description, $parent) {
 	include("resources/config.php");
 	
 	$encoded_description = string2html($description);
+	$my_uid = get_my_uid();
 	
-	run_sql_command("INSERT INTO groups (name, description, parent) VALUES ('$group_name', '$encoded_description', $parent)");
+	run_sql_command("INSERT INTO groups (name, description, parent, owner) VALUES ('$group_name', '$encoded_description', $parent, $my_uid)");
 }
 
 // *****************************************
@@ -202,6 +228,16 @@ function edit_group($gid, $group_name, $description, $parent) {
 	run_sql_command("UPDATE groups SET name='$group_name' WHERE gid=$gid");
 	run_sql_command("UPDATE groups SET description='$description' WHERE gid=$gid");
 	run_sql_command("UPDATE groups SET parent='$parent' WHERE gid=$gid");
+	}
+
+// *****************************************
+// FUNCTION: edit_permisiongroup($gid, $group_name, $description, $parent)
+// *****************************************
+// Update the name or description of group GID
+function edit_permisiongroup($gid, $group_name, $description, $parent) {
+	run_sql_command("UPDATE permisiongroups SET name='$group_name' WHERE gid=$gid");
+	run_sql_command("UPDATE permisiongroups SET description='$description' WHERE gid=$gid");
+	run_sql_command("UPDATE permisiongroups SET parent='$parent' WHERE gid=$gid");
 	}
 
 
@@ -239,27 +275,13 @@ function update_user_password($uid, $password) {
 
 
 // *****************************************
-// FUNCTION: grant_user_admin_rights($uid)
+// FUNCTION: grant_user_rights($uid, $accGrant)
 // *****************************************
-function grant_user_admin_rights($uid) {
+function grant_user_rights($uid, $accGrant) {
 	include("resources/config.php");
 
-	run_sql_command("UPDATE users SET admin=1 WHERE uid='$uid'");
+	run_sql_command("UPDATE users SET admin=$accGrant WHERE uid='$uid'");
 }
-
-
-// *****************************************
-// FUNCTION: remove_user_admin_rights($uid)
-// *****************************************
-function remove_user_admin_rights($uid) {
-	include("resources/config.php");
-
-	// Can't remove admin rights for superuser
-	if ($uid != -1) {
-		run_sql_command("UPDATE users SET admin=0 WHERE uid='$uid'");
-	}
-}
-
 
 // *****************************************
 // FUNCTION: get_uid($login)
@@ -363,7 +385,7 @@ function am_i_admin() {
 		}
 	
 	// Check users table
-	$admin = get_sql_value("SELECT admin FROM users WHERE uid=$uid");
+	$admin = get_sql_value("SELECT admin FROM users WHERE uid=$uid") & 1;
 	
 	if ($admin == 1) {
 		return true;
@@ -373,6 +395,17 @@ function am_i_admin() {
 		}
 	}
 //End function
+
+// *****************************************
+// FUNCTION: grant_user_rights($uid, $accGrant)
+// *****************************************
+function user_rights() {
+	$uid = get_my_uid();
+
+	$admin = get_sql_value("SELECT admin FROM users WHERE uid=$uid");
+
+	return $admin;
+}
 
 
 // *****************************************
@@ -443,6 +476,14 @@ function get_group_list($parent) {
 	}
 	
 // *****************************************
+// FUNCTION: get_permisiongroup_list($parent)
+// *****************************************
+// Returns array of all groups
+function get_permisiongroup_list($parent) {
+	return get_sql_results("SELECT * FROM permisiongroups WHERE parent=$parent ORDER BY name");
+	}
+	
+// *****************************************
 // FUNCTION: get_user_list()
 // *****************************************
 // Returns array of all groups
@@ -452,12 +493,12 @@ function get_user_list() {
 
 
 // *****************************************
-// FUNCTION: get_shared_users($id)
+// FUNCTION: get_shared_users($gid)
 // *****************************************
 // Returns array of user info for all users shared with object with provided ID
 // Returns NULL if object has not been shared with any users
-function get_shared_users($id) {
-	return get_sql_results("SELECT * FROM vPasswordSharedUsers WHERE id=$id ORDER BY shared_login");
+function get_shared_users($gid) {
+	return get_sql_results("SELECT * FROM vPasswordSharedUsers WHERE gid=$gid ORDER BY shared_login");
 	}
 
 // *****************************************
@@ -469,6 +510,14 @@ function get_group_name($gid) {
 	}
 
 // *****************************************
+// FUNCTION: get_permisiongroup_name($gid)
+// *****************************************
+// Returns name of group with provided gid
+function get_permisiongroup_name($gid) {
+	return get_sql_value("SELECT name FROM permisiongroups WHERE gid=$gid");
+	}
+
+// *****************************************
 // FUNCTION: get_group_description($gid)
 // *****************************************
 // Returns description of group with provided GID
@@ -477,11 +526,27 @@ function get_group_description($gid) {
 	}
 	
 // *****************************************
+// FUNCTION: get_permisiongroup_description($gid)
+// *****************************************
+// Returns description of group with provided GID
+function get_permisiongroup_description($gid) {
+	return get_sql_value("SELECT description FROM permisiongroups WHERE gid=$gid");
+	}
+	
+// *****************************************
 // FUNCTION: get_group_parent($gid)
 // *****************************************
 // Returns description of group with provided GID
 function get_group_parent($gid) {
 	return get_sql_value("SELECT parent FROM groups WHERE gid=$gid");
+	}
+
+// *****************************************
+// FUNCTION: get_permisiongroup_parent($gid)
+// *****************************************
+// Returns description of group with provided GID
+function get_permisiongroup_parent($gid) {
+	return get_sql_value("SELECT parent FROM permisiongroups WHERE gid=$gid");
 	}
 
 // *****************************************
@@ -510,12 +575,38 @@ function get_group_options($gid, $selected = 0, $without_group = 0) {
 	$results = get_group_list($gid);
 	foreach ($results as $entry) {
 		$id =  $entry['gid'];
+		if (check_group_permissions($id, get_my_uid()))  {
+			$name = $entry['name'];
+			$selected_op = ($id == $selected ? "selected" : "");
+		
+			if ($id != $without_group) {
+				$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
+				$result = $result .get_group_options($id, $selected, $without_group);
+			}
+		}
+	}
+
+	return $result;
+	
+	}
+
+// *****************************************
+// FUNCTION: get_group_options($gid, $selected = 0, $without_group = 0)
+// *****************************************
+// Returns path of group with provided GID
+function get_permisiongroup_options($gid, $selected = 0, $without_group = 0) {
+	echo $gid;
+	
+	$result = "";
+	$results = get_permisiongroup_list($gid);
+	foreach ($results as $entry) {
+		$id =  $entry['gid'];
 		$name = $entry['name'];
 		$selected_op = ($id == $selected ? "selected" : "");
 	
 		if ($id != $without_group) {
 			$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
-			$result = $result .get_group_options($id, $selected, $without_group);
+			$result = $result .get_permisiongroup_options($id, $selected, $without_group);
 		}
 	}
 
@@ -561,6 +652,15 @@ function delete_user($uid) {
 // *****************************************
 // Delete user UID and remove shared permissions
 function delete_group($gid) {
+	// Delete the group entry
+	run_sql_command("DELETE FROM groups WHERE gid=$gid");
+	}
+
+// *****************************************
+// FUNCTION: delete_group($gid)
+// *****************************************
+// Delete user UID and remove shared permissions
+function delete_permisiongroup($gid) {
 	// Delete shared group permissions
 	run_sql_command("DELETE FROM group_permissions WHERE gid=$gid");
 	
@@ -568,7 +668,7 @@ function delete_group($gid) {
 	run_sql_command("DELETE FROM group_members WHERE gid=$gid");
 	
 	// Delete the group entry
-	run_sql_command("DELETE FROM groups WHERE gid=$gid");
+	run_sql_command("DELETE FROM permisiongroups WHERE gid=$gid");
 	}
 
 
@@ -748,7 +848,7 @@ function encrypt_string($simple_string) {
 	$decryption_iv = '1234567891011121';
 	$decryption_key = $secret_key;	
 	echo openssl_encrypt($simple_string, $ciphering, $encryption_key, $options, $encryption_iv)."<br>";
-	return openssl_encrypt($simple_string, $ciphering, $encryption_key, $options, $encryption_iv);
+	return openssl_encrypt($simple_string, $ciphering, $encryption_iv, $options, $encryption_key);
 }
 
 
@@ -757,6 +857,8 @@ function encrypt_string($simple_string) {
 // *****************************************
 // Decrypt a string using the secret key
 function decrypt_string($simple_string) {
+	global $IsShowError;
+
 	// Include config.php for secret key
 	include("resources/config.php");
 	
@@ -767,7 +869,20 @@ function decrypt_string($simple_string) {
 	$options = 0;
 	$encryption_iv = '1234567891011121';
 	$encryption_key = $secret_key;
+
+if ($IsShowError) {
+	ini_set('display_errors', '0');
+	ini_set('display_startup_errors', '0');
+	error_reporting(E_NONE);
+}
+
 	return openssl_decrypt($simple_string, $ciphering, $decryption_key, $options, $decryption_iv);
+
+if ($IsShowError) {
+	ini_set('display_errors', '1');
+	ini_set('display_startup_errors', '1');
+	error_reporting(E_ALL);
+}
 }
 
 
@@ -814,7 +929,7 @@ function edit_password_object($id, $name, $login, $password, $group, $note) {
 // *****************************************
 // Returns array of data for the provided ID
 function add_password_object($name, $login, $password, $group, $note) {
-	echo "INSERT INTO data (name, login, password, note, group_id) VALUES ('$name', '$login', '$password', '$note', $group)";
+//	echo "INSERT INTO data (name, login, password, note, group_id) VALUES ('$name', '$login', '$password', '$note', $group)";
 	run_sql_command("INSERT INTO data (name, login, password, note, group_id) VALUES ('$name', '$login', '$password', '$note', $group)");
 	}
 
@@ -836,11 +951,20 @@ function delete_password($id) {
 
 
 // *****************************************
-// FUNCTION: get_object_name($id)
+// FUNCTION: get_object_name($gid)
 // *****************************************
 // Returns the name of object ID
-function get_object_name($id) {
-	return get_sql_value("SELECT name FROM data WHERE id=$id");
+function get_object_name($gid) {
+	return get_sql_value("SELECT name FROM groups WHERE gid=$gid");
+	}
+
+
+// *****************************************
+// FUNCTION: get_group_membership($uid)
+// *****************************************
+// Returns array of groups that the provided UID belongs to
+function get_permissiongroup_membership($uid) {
+	return get_sql_results("SELECT gid, name FROM vGroupMembers WHERE uid=$uid");
 	}
 
 
@@ -850,8 +974,14 @@ function get_object_name($id) {
 // Tests if a given UID has access to an pbject ID
 function check_object_permissions($id, $uid) {
 	// Check if UID is owner
-	$owner = get_sql_value("SELECT owner FROM data WHERE id=$id");
-	if (get_my_uid() == $owner) {
+	$gid = get_sql_value("SELECT group_id FROM data WHERE id=$id");
+	return check_group_permissions($gid, $uid);
+}
+
+function check_group_permissions($id, $uid)  {
+	
+	$owner = get_sql_value("SELECT owner FROM groups WHERE gid=$id");
+	if ($uid == $owner) {
 		return true;
 	}
 	
@@ -859,14 +989,19 @@ function check_object_permissions($id, $uid) {
 	if (get_sql_value("SELECT id FROM user_permissions WHERE id=$id AND uid=$uid") != null) {
 		return true;
 	}
-	
+
 	// Check if ID is shared with groups
-	$my_groups = get_group_membership($uid);	// Get all groups that uid belongs to
+	$my_groups = get_permissiongroup_membership($uid);	// Get all groups that uid belongs to
 	foreach ($my_groups as $group) {			// Iterate through all groups
 		$gid = $group['gid'];
 		if (get_sql_value("SELECT id FROM group_permissions WHERE gid='$gid' AND id='$id'") != null) {	// Check if object ID is shared with GID
 			return true;
 		}
+	}
+
+	$parent = get_sql_value("SELECT parent FROM groups WHERE gid=$id");
+	if ($parent != 0)  {
+		return check_group_permissions($parent, $uid);
 	}
 	
 	
@@ -876,11 +1011,187 @@ function check_object_permissions($id, $uid) {
 
 
 // *****************************************
-// FUNCTION: get_owner($id)
+// FUNCTION: get_owner($gid)
 // *****************************************
 // Returns UID of owner for the provided password ID
-function get_owner($id) {
-	return get_sql_value("SELECT owner FROM data WHERE id=$id");
+function get_owner($gid) {
+	return get_sql_value("SELECT owner FROM groups WHERE gid=$gid");
 	}
+
+// *****************************************
+// FUNCTION: get_permisiongroup_members($gid)
+// *****************************************
+// Returns array of members of group with provided GID
+function get_permisiongroup_members($gid) {
+	return get_sql_results("SELECT uid, login FROM vGroupMembers WHERE gid=$gid");
+	}
+
+// *****************************************
+// FUNCTION: add_user_to_group($gid, $uid)
+// *****************************************
+// Add user UID to group GID
+function add_user_to_permisiongroup($gid, $uid) {
+	// Check that user isn't already a member
+	if (get_sql_value("SELECT uid FROM group_members WHERE gid=$gid AND uid=$uid") == NULL) {
+		run_sql_command("INSERT INTO group_members (gid, uid) VALUES ('$gid', '$uid')");
+		}
+	}
+
+// *****************************************
+// FUNCTION: remove_user_from_permisiongroup($gid, $uid)
+// *****************************************
+// Remove user UID from group GID
+function remove_user_from_permisiongroup($gid, $uid) {
+	run_sql_command("DELETE FROM group_members WHERE gid=$gid AND uid=$uid");
+	}
+
+// *****************************************
+// FUNCTION: share_with_user($gid, $uid, $mode = 'r')
+// *****************************************
+// Share object ID with user UID. Default mode is read-only.
+function share_with_user($gid, $uid, $mode = 'r') {
+	// Check that we aren't already sharing with this user
+	if (get_sql_value("SELECT mode FROM user_permissions WHERE gid=$gid and uid=$uid") == NULL) {
+		run_sql_command("insert into user_permissions (id, uid, mode) values ('$gid', '$uid', '$mode')");
+		}
+	}
+
+
+function share_with_group($id, $gid) {
+	if (get_sql_value("SELECT mode FROM group_permissions WHERE gid=$gid and id=$id") == NULL) {
+		run_sql_command("insert into group_permissions (id, gid, mode) values ('$id', '$gid', '$mode')");
+	}
+}
+
+// *****************************************
+// FUNCTION: get_shared_groups($id)
+// *****************************************
+// Returns array of group info for all groups shared with object with provided ID
+// Returns NULL if object has not been shared with any groups
+function get_shared_groups($gid) {
+	return get_sql_results("SELECT * FROM vPasswordSharedGroups WHERE gid=$gid ORDER BY shared_group");
+	}
+
+function unshare_user($id, $uid)  {
+	run_sql_command("DELETE FROM user_permissions WHERE id=$id AND uid=$uid");
+}
+
+function get_permissiongroup_name($gid)  {
+	return get_sql_value("SELECT name FROM permisiongroups WHERE gid=$gid");
+}
+
+function unshare_group($id, $gid)  {
+	run_sql_command("DELETE FROM group_permissions WHERE id=$id AND gid=$gid");
+}
+
+function checkInPOST($name)  {
+	if (array_key_exists($name, $_POST))
+	{
+		return $_POST[$name];
+	}
+	else
+	{
+		return "";
+	}
+}
+
+
+
+class HttpAcceptLanguageHeaderLocaleDetector
+{
+  const HTTP_ACCEPT_LANGUAGE_HEADER_KEY = 'HTTP_ACCEPT_LANGUAGE';
+
+  public static function detect()
+  {
+    $httpAcceptLanguageHeader = static::getHttpAcceptLanguageHeader();
+    if ($httpAcceptLanguageHeader == null) {
+      return [];
+    }
+    $locales = static::getWeightedLocales($httpAcceptLanguageHeader);
+    $sortedLocales = static::sortLocalesByWeight($locales);
+    return array_map(function ($weightedLocale) {
+      return $weightedLocale['locale'];
+    }, $sortedLocales);
+  }
+  
+  private static function getHttpAcceptLanguageHeader()
+  {
+    if (isset($_SERVER[static::HTTP_ACCEPT_LANGUAGE_HEADER_KEY])) {
+      return trim($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    } else {
+      return null;
+    }
+  }
+  
+  private static function getWeightedLocales($httpAcceptLanguageHeader)
+  {
+    if (strlen($httpAcceptLanguageHeader) == 0) {
+      return [];
+    }
+    $weightedLocales = [];
+    // We break up the string 'en-CA,ar-EG;q=0.5' along the commas,
+    // and iterate over the resulting array of individual locales. Once
+    // we're done, $weightedLocales should look like
+    // [['locale' => 'en-CA', 'q' => 1.0], ['locale' => 'ar-EG', 'q' => 0.5]]
+    foreach (explode(',', $httpAcceptLanguageHeader) as $locale) {
+      // separate the locale key ("ar-EG") from its weight ("q=0.5")
+      $localeParts = explode(';', $locale);
+      $weightedLocale = ['locale' => $localeParts[0]];
+      if (count($localeParts) == 2) {
+        // explicit weight e.g. 'q=0.5'
+        $weightParts = explode('=', $localeParts[1]);
+        // grab the '0.5' bit and parse it to a float
+        $weightedLocale['q'] = floatval($weightParts[1]);
+      } else {
+        // no weight given in string, ie. implicit weight of 'q=1.0'
+        $weightedLocale['q'] = 1.0;
+      }
+      $weightedLocales[] = $weightedLocale;
+    }  
+    return $weightedLocales;
+  }
+  
+  /**
+   * Sort by high to low `q` value
+   */
+  private static function sortLocalesByWeight($locales)
+  {
+    usort($locales, function ($a, $b) {
+      // usort will cast float values that we return here into integers,
+      // which can mess up our sorting. So instead of subtracting the `q`,
+      // values and returning the difference, we compare the `q` values and
+      // explicitly return integer values.
+      if ($a['q'] == $b['q']) {
+        return 0;
+      }
+      if ($a['q'] > $b['q']) {
+        return -1;
+      }
+      return 1;
+    });
+    return $locales;
+  }
+}
+
+function getUserLang()
+{
+	if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+		$localeToUse = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	}
+	else {
+		$localeToUse = Locale::getDefault();
+	}
+
+    if(strstr($localeToUse, '-') === FALSE)
+    {
+        switch($localeToUse )
+        {
+            case 'pl': $localeToUse  = 'pl-PL'; break;
+            case 'en': $localeToUse  = 'en-US'; break;
+        }
+    }
+	$localeToUse =  str_replace("-", "_", $localeToUse);
+    return $localeToUse;
+}
 
 ?>

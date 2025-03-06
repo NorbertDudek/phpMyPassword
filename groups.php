@@ -1,6 +1,7 @@
 <?php
 $requireadmin = false;
 require_once('header.php');
+require_once('resources/stack.php');
 ?>
 
 <h2>Groups:</h2>
@@ -17,24 +18,41 @@ require_once('header.php');
 <?php
 
 
+function echoGroup($level, $name, $description, $gid)  {
+	$myRights = user_rights();
+?>
+			<tr>
+				<td><?php echo str_repeat('&nbsp;', $level *4); echo $name;?></td>
+				<td><?php echo $description;?></td>
+				<td>
+					<?php if (($myRights & accGroupEdit) != 0) { ?>
+						<a href="edit_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-primary">Edit</a>
+					<?php } ?>
+					<?php if (($myRights & accGroupRemove) != 0) { ?>
+						<a href="delete_group.php?gid=<?php echo $gid; ?>" class="btn btn-xs btn-danger">Delete</a>
+					<?php } ?>
+				</td>
+			</tr>
+<?php
+
+}
+
 function list_groups($parent, $level = 0) {
+	
+	global $groupstack;
 	
 	if ($level >= 10)
 		return;
 		
 	$groups = get_group_list($parent);
-	foreach ($groups as $group) {
-	?>
-			<tr>
-				<td><?php echo str_repeat('&nbsp;', $level *4); echo $group['name'];?></td>
-				<td><?php echo $group['description'];?></td>
-				<td><a href="edit_group.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-primary">Edit</a>
-					<a href="delete_group.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-danger">Delete</a>
-				</td>
-			</tr>
-	<?php
-		list_groups($group['gid'], $level +1);
-		}
+	
+	if (!is_null($groups)) 
+		foreach ($groups as $group) {
+			if ((check_group_permissions($group['gid'], get_my_uid())) || am_i_admin())  {
+				echoGroup($level, $group['name'], $group['description'], $group['gid'] );
+				list_groups($group['gid'], $level +1);
+				}
+			}
 }
 
 list_groups(0);

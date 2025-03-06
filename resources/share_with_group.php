@@ -1,5 +1,5 @@
 <?php
-$groups = get_group_list();
+$groups = get_permisiongroup_list(0);
 ?>
 
 <form method="POST" action="do_share_with_group.php">

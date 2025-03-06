@@ -5,7 +5,9 @@ $id = $_POST['id'];
 
 // Check permissions
 if (!(get_owner($id) == get_my_uid())) {
-	// We don't have permissions!	?>
+	// We don't have permissions!	
+	echo $id." = ".get_owner($id)." - ".get_my_uid();
+	?>
 	<p class="bg-danger center-block">ACCESS DENIED</p>
 <?php	}
 else {

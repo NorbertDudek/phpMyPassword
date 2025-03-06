@@ -1,11 +1,20 @@
 <?php
-$requireadmin = true;
 require_once('header.php');
 
 $gid = $_GET['gid'];
+// Check permissions
+if (!(check_group_permissions($gid, get_my_uid()))) {
+	// We don't have permissions!	?>
+	<div class="bg-danger center-block">ACCESS DENIED</div>
+<?php	}
+else {
+	// Permissions are good
 $group_name = get_group_name($gid);
 $group_description = get_group_description($gid);
 $group_parent = get_group_parent($gid);
+$shared_users = get_shared_users($gid);
+$shared_groups = get_shared_groups($gid);
+
 ?>
 
 <div class="row">
@@ -45,10 +54,49 @@ $group_parent = get_group_parent($gid);
 						</div>
 					</div>
 				</form>
+				
+				<form action="share_with_user.php" class="form-horizontal" method="POST">
+					<input type="hidden" name="id" value="<?php echo $gid; ?>">
+					<div class="form-group">
+						<label for="shared_users" class="col-sm-3 control-label">Shared Users:</label>
+						<div class="col-sm-9">
+							<select class="form-control input-sm" name="shared_users[]" multiple>
+							<?php foreach ($shared_users as $user) {
+								$shared_uid = $user['shared_uid'];
+								$shared_username = $user['shared_login']; ?>
+								<option value="<?php echo $shared_uid;?>"><?php echo $shared_username;?></option>
+								<?php } //End ForEach ?>
+							</select>
+							<button class="btn btn-xs btn-primary" name="action" value="add">Add User(s)</button>
+							<button class="btn btn-xs btn-danger" name="action" value="remove">Remove Selected User(s)</button>
+						</div>
+					</div>
+				</form>
+				<form action="share_with_group.php" class="form-horizontal" method="POST">
+					<input type="hidden" name="id" value="<?php echo $gid; ?>">
+					<div class="form-group">
+						<label for="shared_groups" class="col-sm-3 control-label">Shared Groups:</label>
+						<div class="col-sm-9">
+							<select class="form-control input-sm" name="shared_groups[]" multiple>
+							<?php foreach ($shared_groups as $group) {
+								$shared_gid = $group['shared_gid'];
+								$shared_group = $group['shared_group']; ?>
+								<option value="<?php echo $shared_gid;?>"><?php echo $shared_group;?></option>
+								<?php } //End ForEach ?>
+							</select>
+							<button class="btn btn-xs btn-primary" name="action" value="add">Add Group(s)</button>
+							<button class="btn btn-xs btn-danger" name="action" value="remove">Remove Selected Group(s)</button>
+						</div>
+					</div>
+				</form>
+				
+				
 			</div>
 		</div>
 	</div>
 </div>
+
+<?php } ?>
 
 <?php
 require_once('footer.php');
