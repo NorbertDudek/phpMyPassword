@@ -27,10 +27,6 @@ $shared_groups = get_shared_groups($gid);
 				<form action="do_edit_group.php" method="POST" class="form-horizontal">
 					<input type="hidden" name="gid" value="<?php echo $gid?>">
 					<div class="form-group">
-						<label class="control-label col-sm-3">ID:</label>
-						<div class="col-sm-9"><p class="form-control-static"><?php echo $gid; ?></p></div>
-					</div>
-					<div class="form-group">
 						<label for="group_name" class="control-label col-sm-3"><?php echo _("Name"); ?>:</label>
 						<div class="col-sm-9"><input type="text" class="form-control" id="group_name" name="group_name" maxlength="128" value="<?php echo $group_name; ?>"></div>
 					</div>

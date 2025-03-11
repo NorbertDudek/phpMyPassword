@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-
-
 <?php
+require_once('header.php');
 include('resources/config.php');
 
 if ($require_https == true) {
@@ -40,29 +36,36 @@ if ($require_https == true) {
 			<!-- Login page contents -->
 			<div class="col-sm-8">
 				<div class="panel panel-primary">
-					<div class="panel-heading">Please login</div>
+					<div class="panel-heading"><?php echo _("Please login"); ?></div>
 					<div class="panel-body">
-						<?php if ($_GET['login'] == "unsuccessful") {
-							$user = $_GET['user']; ?>
-							<div class="alert alert-danger">Login for user '<?php echo $user; ?>' was unsuccessful. Username or password incorrect.</div>
+						<?php 
+                            if ((isset($_GET['login'])) and ($_GET['login'] == "unsuccessful")) {
+							 $user = $_GET['user']; ?>
+							<div class="alert alert-danger">
+                            <?php echo str_replace("{name}", $user, _("Login for user {name} was unsuccessful. Username or password incorrect.")); ?>
+                            
+                            
+                            
+                            
+                            </div>
 						<?php } ?>
 
 						<form method="POST" action="do_login.php" class="form-horizontal">
 							<div class="form-group">
-								<label for="user" class="col-sm-4 control-label">User:</label>
+								<label for="user" class="col-sm-4 control-label"><?php echo _("User name"); ?>:</label>
 								<div class="col-sm-4">
 									<input type="text" class="form-control" name="user" placeholder="Username">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="password" class="col-sm-4 control-label">Password:</label>
+								<label for="password" class="col-sm-4 control-label"><?php echo _("Password"); ?>:</label>
 								<div class="col-sm-4">
 									<input type="password" class="form-control" name="password" placeholder="Password">
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="col-sm-4 col-sm-offset-4">
-									<button type="submit" class="btn btn-primary">Login</input>
+									<button type="submit" class="btn btn-primary"><?php echo _("Login"); ?></input>
 								</div>
 							</div>
 						</form>
@@ -71,3 +74,6 @@ if ($require_https == true) {
 		</div>
 	</body>
 </html>
+<?php
+    require_once('footer.php');
+?>

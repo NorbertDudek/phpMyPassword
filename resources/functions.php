@@ -125,7 +125,8 @@ function check_session_login() {
 	
 	// Redirect to login page if timestamp is null
 	if ($SessionTimestamp == NULL) {
-		header('Location: login.php');
+        if (basename($_SERVER['PHP_SELF']) != 'login.php')
+		  header('Location: login.php');
 	}
 	else {
 		update_session_timestamp();
@@ -182,15 +183,18 @@ function cleanup_old_sessions() {
 	// Query for all sessions
 	$all_sessions = get_sql_results('select * from sessions');
 	
-	// Check each session timestamp
-	foreach ($all_sessions as $session) {
-		$diff = time() - strtotime($session['timestamp']);
-		
-		if ($diff > $session_timeout) {
-			// Delete if time diff is beyond threshold
-			run_sql_command("DELETE FROM sessions WHERE session_id = '" . $session['session_id'] . "'");
-		}
-	}	
+    if (isset($all_sessions))
+    {
+    	// Check each session timestamp
+    	foreach ($all_sessions as $session) {
+    		$diff = time() - strtotime($session['timestamp']);
+    		
+    		if ($diff > $session_timeout) {
+    			// Delete if time diff is beyond threshold
+    			run_sql_command("DELETE FROM sessions WHERE session_id = '" . $session['session_id'] . "'");
+    		}
+    	}	
+    }
 }
 //End function
 

@@ -34,7 +34,8 @@ else {
  
 }
 
-$myRights = user_rights();
+if (basename($_SERVER['PHP_SELF']) != 'login.php')
+    $myRights = user_rights();
 
 
 /// language
@@ -77,7 +78,7 @@ textdomain($domain);
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-6">
-						<h1>phpPassMan</h1>Powered by <a href="https://kandisoft.pl">KANDISoft</a>
+						<h1>phpPassMan</h1>Powered by <a target="blank" href="https://kandisoft.pl">KANDISoft</a>
 					</div>
 					<div class="col-md-6">
 						
@@ -90,7 +91,7 @@ textdomain($domain);
 		</div>
 		
 		<p/>
-		
+		<?php if (basename($_SERVER['PHP_SELF']) != 'login.php') { ?>
 		<div class="container">	
 			<div class="navbar navbar-default">
 				<div class="navbar-collapse collapse">
@@ -168,3 +169,4 @@ textdomain($domain);
 		
 		<div class="container">
 			<p class="text-right"><?php echo _("Logged in as:")." "; echo get_login(get_my_uid()); ?></p>
+      <?php } ?>

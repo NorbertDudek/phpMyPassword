@@ -157,3 +157,12 @@ msgstr "Użyj CTRL+Click, aby zaznaczyć wiele grup."
 
 msgid "Users belonging to these groups will no longer be able to view the following object"
 msgstr "Użytkownicy należący do tych grup nie będą już mogli przeglądać następującego obiektu"
+
+msgid "Please login"
+msgstr "Zaloguj się"
+
+msgid "Login for user {name} was unsuccessful. Username or password incorrect."
+msgstr "Logowanie użytkownika {name} nie powiodło się. Nieprawidłowa nazwa użytkownika lub hasło."
+
+msgid "Login"
+msgstr "Zaloguj"
