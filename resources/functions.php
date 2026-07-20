@@ -562,7 +562,7 @@ function get_group_path($gid) {
 	
 	if (get_group_parent($gid) != 0) {
 		$gid = get_group_parent($gid);
-		$path = get_group_name($gid) .'/' .$path;
+		$path = get_group_path($gid) .'/' .$path;
 	}
 	
 	return $path;

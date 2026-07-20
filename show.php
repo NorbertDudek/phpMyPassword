@@ -37,14 +37,16 @@ else {
 		
 		
 	function CopyPasswordToClibrd() {
-	  // Get the text field
-	  var copyText = document.getElementById("thepassword");
+	  // Pobierz hasło bezpośrednio z serwera, bez ujawniania go na ekranie
+	  $.get('get_password.php?id=<?php echo $id;?>', function(data) {
+	    navigator.clipboard.writeText(data);
 
-	   // Copy the text inside the text field
-	  navigator.clipboard.writeText(copyText.textContent);
+	    document.getElementById("copypassword").innerText = 'Skopiowano';
 
-	  // Alert the copied text
-	  alert("Copied password to the clipboard");
+	    setTimeout(() => {
+	        document.getElementById('copypassword').textContent = "<?php echo _("Copy to clipboard"); ?>";
+	        }, 2000);
+	  });
 	}	
 
 	function CopyLoginToClibrd() {
@@ -54,8 +56,11 @@ else {
 	   // Copy the text inside the text field
 	  navigator.clipboard.writeText(copyText.textContent);
 
-	  // Alert the copied text
-	  alert("Copied login to the clipboard");
+        document.getElementById("copylogin").innerText = 'Skopiowano';
+        
+        setTimeout(() => {
+            document.getElementById('copylogin').textContent = "<?php echo _("Copy to clipboard"); ?>";
+            }, 2000);
 	}	
 	</script>
 
@@ -78,7 +83,7 @@ else {
 				<code id="thelogin"><?php echo $login; ?></code>
 			</td>
 			<td>
-				<button onclick="CopyLoginToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
+				<button id="copylogin" onclick="CopyLoginToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
 			</td>
 			
 		</tr>
@@ -88,7 +93,7 @@ else {
 				<code id="thepassword"><?php echo $placeholder;?></code>
 			</td>
 			<td>
-				<button onclick="CopyPasswordToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
+				<button id="copypassword" onclick="CopyPasswordToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>
 			</td>
 		</tr>
 		<tr>
