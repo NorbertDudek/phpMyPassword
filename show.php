@@ -27,8 +27,15 @@ else {
 	<script>
 	$(document).ready(function() {
 		$('#thepassword').click(function() {
-			$('#thepassword').load('get_password.php?id=<?php echo $id;?>');
-			
+			// Pobieramy hasło jako czysty tekst (fetch + .text()) i wstawiamy przez
+			// textContent, a nie innerHTML/.load() - dzięki temu znaki specjalne
+			// (np. &, <, >) nie są interpretowane ani przekodowywane jako HTML.
+			fetch('get_password.php?id=<?php echo $id;?>')
+				.then(response => response.text())
+				.then(function(data) {
+					document.getElementById('thepassword').textContent = data;
+				});
+
 			window.setTimeout(function () {
 				$('#thepassword').html('<?php echo $placeholder;?>');
 				}, 10000);
@@ -37,16 +44,20 @@ else {
 		
 		
 	function CopyPasswordToClibrd() {
-	  // Pobierz hasło bezpośrednio z serwera, bez ujawniania go na ekranie
-	  $.get('get_password.php?id=<?php echo $id;?>', function(data) {
-	    navigator.clipboard.writeText(data);
+	  // Pobieramy hasło jako czysty tekst (bez wyświetlania) i kopiujemy bezpośrednio
+	  // do schowka - bez pośredniego zapisu/odczytu przez DOM, więc znaki specjalne
+	  // takie jak "&" nie zostają przekodowane na encje HTML (np. "&amp;").
+	  fetch('get_password.php?id=<?php echo $id;?>')
+	  	.then(response => response.text())
+	  	.then(function(data) {
+	  		navigator.clipboard.writeText(data);
 
-	    document.getElementById("copypassword").innerText = 'Skopiowano';
+	  		document.getElementById("copypassword").innerText = 'Skopiowano';
 
-	    setTimeout(() => {
-	        document.getElementById('copypassword').textContent = "<?php echo _("Copy to clipboard"); ?>";
-	        }, 2000);
-	  });
+	  		setTimeout(() => {
+	  			document.getElementById('copypassword').textContent = "<?php echo _("Copy to clipboard"); ?>";
+	  			}, 2000);
+	  	});
 	}	
 
 	function CopyLoginToClibrd() {

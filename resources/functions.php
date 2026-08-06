@@ -1,15 +1,15 @@
 <?php
 
 
-define(accAdmin, 1);
-define(accExport, 2);
-define(accPasswordAdd, 4);
-define(accPasswordEdit, 8);
-define(accPasswordRemove, 16);
-define(accGroupAdd, 32);
-define(accGroupEdit, 64);
-define(accGroupRemove, 128);
-define(accGroupSee, 256);
+define('accAdmin', 1);
+define('accExport', 2);
+define('accPasswordAdd', 4);
+define('accPasswordEdit', 8);
+define('accPasswordRemove', 16);
+define('accGroupAdd', 32);
+define('accGroupEdit', 64);
+define('accGroupRemove', 128);
+define('accGroupSee', 256);
 
 
 $IsShowError = true;
@@ -426,7 +426,9 @@ function check_ldap_credentials($user, $password) {
 		}
 	
 	//Connect to LDAP server
-	define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032);
+	if (!defined('LDAP_OPT_DIAGNOSTIC_MESSAGE')) {
+		define('LDAP_OPT_DIAGNOSTIC_MESSAGE', 0x0032);
+	}
 	$ldapconn = ldap_connect($ldap_server, $ldap_port) or die("Could not connect to LDAP server!");
 		
 	//Set LDAP options
@@ -680,6 +682,23 @@ function delete_permisiongroup($gid) {
 
 
 // *****************************************
+// FUNCTION: db_connect()
+// *****************************************
+// Create and return a PDO connection to MySQL using settings from config.php
+function db_connect($db_host, $db_name, $db_user, $db_pass) {
+	try {
+		$oPDO = new PDO("mysql:host=$db_host;dbname=$db_name;charset=latin1", $db_user, $db_pass);
+		$oPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		return $oPDO;
+	}
+	catch (PDOException $e) {
+		echo("DB CONNECTION ERROR: " . $e->getMessage());
+		die();
+	}
+}
+
+
+// *****************************************
 // FUNCTION: get_sql_value($query)
 // *****************************************
 // Return a single value from a single row
@@ -688,26 +707,28 @@ function get_sql_value($query) {
 	include("resources/config.php");
 	
 	// Connect to MySQL
-	$oMySQL = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-	if (mysqli_connect_errno()) {
-		echo("DB ERROR: " . mysqli_connect_error());
+	$oPDO = db_connect($db_host, $db_name, $db_user, $db_pass);
+	
+	// Run query
+	try {
+		$stmt = $oPDO->query($query);
+	}
+	catch (PDOException $e) {
+		echo("DB ERROR: " . $e->getMessage());
 		die();
 	}
 	
-	// Run query
-	$result = mysqli_query($oMySQL, $query);
-	
 	// Return NULL if no rows returned
-	if (mysqli_num_rows($result) == 0) {
+	$row = $stmt->fetch(PDO::FETCH_NUM);
+	if ($row === false) {
 		$sResult = NULL;
 	}
 	else {
-		$row = mysqli_fetch_row($result);
 		$sResult = $row[0];
 	}
 	
 	// Close connection
-	mysqli_close($oMySQL);
+	$oPDO = null;
 	
 	return $sResult;
 }
@@ -722,31 +743,25 @@ function get_sql_results($query) {
 	include("resources/config.php");
 	
 	// Connect to MySQL
-	$oMySQL = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-	if (mysqli_connect_errno()) {
-		echo("DB ERROR: " . mysqli_connect_error());
+	$oPDO = db_connect($db_host, $db_name, $db_user, $db_pass);
+	
+	// Run query
+	try {
+		$stmt = $oPDO->query($query);
+	}
+	catch (PDOException $e) {
+		echo("DB ERROR: " . $e->getMessage());
 		die();
 	}
 	
-	// Run query
-	$result = mysqli_query($oMySQL, $query);
-	
 	// Were results returned?
-	if (mysqli_affected_rows($oMySQL) > 0) {
-		// At least one row was returned
-		// Build array of all rows
-		while ($row = mysqli_fetch_array($result)) {
-			$ret[] = $row;
-		}
+	$ret = null;
+	while ($row = $stmt->fetch(PDO::FETCH_BOTH)) {
+		$ret[] = $row;
 	}
 	
-	// No results, return null
-	else {
-		$ret = null;
-		}
-	
 	// Close connection
-	mysqli_close($oMySQL);
+	$oPDO = null;
 	
 	return $ret;
 }
@@ -762,23 +777,19 @@ function run_sql_command($query) {
 	include("resources/config.php");
 	
 	// Connect to MySQL
-	$oMySQL = mysqli_connect($db_host, $db_user, $db_pass, $db_name);	
-	if (mysqli_connect_errno()) {
-		echo "DB CONNECTION ERROR: " . mysqli_connect_error();
-		die();
-		}
+	$oPDO = db_connect($db_host, $db_name, $db_user, $db_pass);
 	
 	// Run query
-	mysqli_query($oMySQL, $query);
-	
-	// Query error handling
-	if (mysqli_errno($oMySQL)) {
-		echo "DB QUERY ERROR: " . mysqli_error($oMySQL);
+	try {
+		$oPDO->exec($query);
+	}
+	catch (PDOException $e) {
+		echo "DB QUERY ERROR: " . $e->getMessage();
 		die();
-		}
+	}
 	
 	// Close connection
-	mysqli_close($oMySQL);
+	$oPDO = null;
 }
 
 
@@ -791,15 +802,13 @@ function sqlescape($string) {
 	include("resources/config.php");
 	
 	// Connect to MySQL
-	$oMySQL = mysqli_connect($db_host, $db_user, $db_pass, $db_name);	
-	if (mysqli_connect_errno()) {
-		echo "DB CONNECTION ERROR: " . mysqli_connect_error();
-		die();
-	}
+	$oPDO = db_connect($db_host, $db_name, $db_user, $db_pass);
 	
-	$escaped_string = mysqli_real_escape_string($oMySQL, $string);
+	// PDO::quote() wraps the value in quotes; strip them since callers
+	// already wrap the escaped value in single quotes themselves
+	$escaped_string = substr($oPDO->quote($string), 1, -1);
 	
-	mysqli_close($oMySQL);
+	$oPDO = null;
 	
 	return $escaped_string;
 }
@@ -864,7 +873,7 @@ function decrypt_string($simple_string) {
 if ($IsShowError) {
 	ini_set('display_errors', '0');
 	ini_set('display_startup_errors', '0');
-	error_reporting(E_NONE);
+	error_reporting(0);
 }
 
 	return openssl_decrypt($simple_string, $ciphering, $decryption_key, $options, $decryption_iv);

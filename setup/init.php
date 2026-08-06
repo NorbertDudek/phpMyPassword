@@ -86,23 +86,26 @@ function run_init_query($query, $user, $password, $database = 'mysql') {
 	include("../resources/config.php");
 	
 	// Connect to MySQL
-	$oMySQL = mysqli_connect($db_host, $user, $password, $database);
-	if (mysqli_connect_errno()) {
-		echo "DB CONNECTION ERROR: " . mysqli_connect_error();
+	try {
+		$oPDO = new PDO("mysql:host=$db_host;dbname=$database;charset=latin1", $user, $password);
+		$oPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}
+	catch (PDOException $e) {
+		echo "DB CONNECTION ERROR: " . $e->getMessage();
 		die();
-		}
+	}
 	
 	// Run query
-	mysqli_query($oMySQL, $query);
-	
-	// Query error handling
-	if (mysqli_errno($oMySQL)) {
-		echo "DB QUERY ERROR: " . mysqli_error($oMySQL);
+	try {
+		$oPDO->exec($query);
+	}
+	catch (PDOException $e) {
+		echo "DB QUERY ERROR: " . $e->getMessage();
 		die();
-		}
+	}
 	
 	// Close connection
-	mysqli_close($oMySQL);
+	$oPDO = null;
 }
 
 ?>
