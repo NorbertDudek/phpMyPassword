@@ -14,8 +14,8 @@ else {
 	$pass_entry = get_password_object($id);
 
 	$name = $pass_entry['name'];
-	$login = decrypt_string($pass_entry['login']);
-	$password = decrypt_string($pass_entry['password']);
+	$login = htmlspecialchars_decode(decrypt_string($pass_entry['login']));
+	$password = htmlspecialchars_decode(decrypt_string($pass_entry['password']));
 	$note = $pass_entry['note'];
 	$group = $pass_entry['group_id'];
 ?>
@@ -44,13 +44,13 @@ else {
 					</div>
 					<div class="form-group">
 						<label for="login" class="col-sm-3 control-label"><?php echo _("User name"); ?>:</label>
-						<div class="col-sm-9"><input type="text" class="form-control" name="login" maxlength="256" value="<?php echo $login; ?>"></div>
+						<div class="col-sm-9"><input type="text" class="form-control" name="login" maxlength="256" value="<?php echo htmlspecialchars($login); ?>"></div>
 					</div>
 					<div class="form-group">
 						<label for="password" class="col-sm-3 control-label"><?php echo _("Password"); ?>:</label>
 						<div class="col-sm-9" style="vertical-align: middle;">
                             <span class="col-sm-9" style="padding-left: 0px;">
-                                <input id="password" type="password" class="form-control" name="password" maxlength="256" value="<?php echo $password; ?>">
+                                <input id="password" type="password" class="form-control" name="password" maxlength="256" value="<?php echo htmlspecialchars($password); ?>">
                             </span>
                             <a href="#" class="col-sm-1 btn btn-sm" role="button" id="showpassword"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <a href="#" class="col-sm-1 btn btn-sm" role="button" id="genpassword"><span class="glyphicon glyphicon-random"></span></span></a>

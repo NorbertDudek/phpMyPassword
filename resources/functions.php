@@ -894,7 +894,10 @@ function get_decrypted_password($id, $uid) {
 
 	// Check if I have permissions
 	$encrypted_pass = get_sql_value("SELECT password FROM data WHERE id=$id");
-	return decrypt_string($encrypted_pass);
+	// htmlspecialchars_decode: naprawia hasla zapisane wczesniej z bledem
+	// (do_add.php/do_edit.php escapowaly & < > " ' przed zaszyfrowaniem).
+	// Dla nowych wpisow (bez encji) to no-op.
+	return htmlspecialchars_decode(decrypt_string($encrypted_pass));
 }
 
 

@@ -3,8 +3,8 @@
 include('resources/functions.php');
 
 $name = $_POST['name'];
-$login = encrypt_string(htmlspecialchars($_POST['login']));
-$password = encrypt_string(htmlspecialchars($_POST['password']));
+$login = encrypt_string($_POST['login']);
+$password = encrypt_string($_POST['password']);
 $note = sqlescape(htmlspecialchars($_POST['note']));
 $group = $_POST['group'];
 

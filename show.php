@@ -13,7 +13,7 @@ else {
 	$pass_entry = get_sql_results("SELECT * FROM data WHERE id=$id");
 
 	$name = $pass_entry[0]['name'];
-	$login = decrypt_string($pass_entry[0]['login']);
+	$login = htmlspecialchars_decode(decrypt_string($pass_entry[0]['login']));
 	$password = $pass_entry[0]['password'];
 	$note = $pass_entry[0]['note'];
 	$group = $pass_entry[0]['group_id'];
@@ -91,7 +91,7 @@ else {
 		<tr>
 			<td><?php echo _("User name"); ?>:</td>
 			<td>
-				<code id="thelogin"><?php echo $login; ?></code>
+				<code id="thelogin"><?php echo htmlspecialchars($login); ?></code>
 			</td>
 			<td>
 				<button id="copylogin" onclick="CopyLoginToClibrd()" class="btn btn-sm btn-primary"><?php echo _("Copy to clipboard"); ?></button>

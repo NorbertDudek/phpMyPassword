@@ -33,14 +33,14 @@ function show_password($gid, $level, $chain = '') {
 	foreach ($results as $entry) {
 		$id =  $entry['id'];
 		$name = $entry['name'];
-		$login = decrypt_string($entry['login']);
+		$login = htmlspecialchars_decode(decrypt_string($entry['login']));
 		$notes = $entry['note'];
 		$myRights = user_rights();
 		
 		?>
 							<tr data-chain="<?php echo $chain;?>" onclick="window.location='show.php?id=<?php echo $id;?>'">
 								<td><?php echo str_repeat('&nbsp;&nbsp;', $level *4 +4).$name; ?></td>
-								<td><?php echo $login; ?></td>
+								<td><?php echo htmlspecialchars($login); ?></td>
 								<td><?php echo $notes; ?></td>
 								<td>
 									<a class="btn btn-primary btn-xs" href="show.php?id=<?php echo $id;?>"><?php echo _("Show"); ?></a>
