@@ -81,6 +81,7 @@ else {
         <h4 class="modal-title" id="genPasswordModalLabel"><?php echo _("Generate password"); ?></h4>
       </div>
       <div class="modal-body">
+        <div id="genPasswordOptions">
         <div class="form-group">
           <label for="genLength"><?php echo _("Password length"); ?></label>
           <input type="number" class="form-control" id="genLength" min="1" max="256" value="12">
@@ -93,10 +94,24 @@ else {
           <label for="genSpecial"><?php echo _("Number of special characters"); ?></label>
           <input type="number" class="form-control" id="genSpecial" min="0" value="1">
         </div>
+        </div>
+        <div id="genPasswordResult" style="display:none;">
+        <div class="form-group">
+          <label for="genResultValue"><?php echo _("Generated password"); ?></label>
+          <input type="text" class="form-control" id="genResultValue" readonly>
+        </div>
+        </div>
       </div>
       <div class="modal-footer">
+        <div id="genPasswordFooterOptions">
         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _("Cancel"); ?></button>
         <button type="button" class="btn btn-primary" id="genPasswordSubmit"><?php echo _("Generate"); ?></button>
+        </div>
+        <div id="genPasswordFooterResult" style="display:none;">
+        <button type="button" class="btn btn-default" id="genPasswordCancelResult"><?php echo _("Cancel"); ?></button>
+        <button type="button" class="btn btn-default" id="genPasswordRegenerate"><?php echo _("Generate again"); ?></button>
+        <button type="button" class="btn btn-primary" id="genPasswordAccept"><?php echo _("Accept"); ?></button>
+        </div>
       </div>
     </div>
   </div>
@@ -120,28 +135,56 @@ function generatePasswordFromSyllables(length, digits, special) {
       if (!response.ok) throw new Error('Blad sieci');
       return response.text();
     })
-    .then(data => {
-      const element = document.getElementById('password');
-      element.value = data;
-      if (element.type === "password") {
-        element.type = "text";
-      }
-    })
     .catch(error => {
       console.error('Blad pobierania:', error);
     });
 }
 
+function genPasswordShowOptions() {
+  document.getElementById('genPasswordOptions').style.display = '';
+  document.getElementById('genPasswordResult').style.display = 'none';
+  document.getElementById('genPasswordFooterOptions').style.display = '';
+  document.getElementById('genPasswordFooterResult').style.display = 'none';
+}
+
+function genPasswordRequestAndShow() {
+  var length = parseInt(document.getElementById('genLength').value, 10) || 12;
+  var digits = parseInt(document.getElementById('genDigits').value, 10) || 0;
+  var special = parseInt(document.getElementById('genSpecial').value, 10) || 0;
+  generatePasswordFromSyllables(length, digits, special).then(function(pwd) {
+    if (typeof pwd === 'undefined') return;
+    document.getElementById('genResultValue').value = pwd;
+    document.getElementById('genPasswordOptions').style.display = 'none';
+    document.getElementById('genPasswordResult').style.display = '';
+    document.getElementById('genPasswordFooterOptions').style.display = 'none';
+    document.getElementById('genPasswordFooterResult').style.display = '';
+  });
+}
+
 document.getElementById('genpassword').addEventListener('click', function(e) {
   e.preventDefault();
+  genPasswordShowOptions();
   $('#genPasswordModal').modal('show');
 });
 
 document.getElementById('genPasswordSubmit').addEventListener('click', function() {
-  var length = parseInt(document.getElementById('genLength').value, 10) || 12;
-  var digits = parseInt(document.getElementById('genDigits').value, 10) || 0;
-  var special = parseInt(document.getElementById('genSpecial').value, 10) || 0;
-  generatePasswordFromSyllables(length, digits, special);
+  genPasswordRequestAndShow();
+});
+
+document.getElementById('genPasswordRegenerate').addEventListener('click', function() {
+  genPasswordRequestAndShow();
+});
+
+document.getElementById('genPasswordAccept').addEventListener('click', function() {
+  var element = document.getElementById('password');
+  element.value = document.getElementById('genResultValue').value;
+  if (element.type === "password") {
+    element.type = "text";
+  }
+  $('#genPasswordModal').modal('hide');
+});
+
+document.getElementById('genPasswordCancelResult').addEventListener('click', function() {
   $('#genPasswordModal').modal('hide');
 });
 

@@ -166,3 +166,31 @@ msgstr "Logowanie użytkownika {name} nie powiodło się. Nieprawidłowa nazwa u
 
 msgid "Login"
 msgstr "Zaloguj"
+
+msgid "Generate password"
+msgstr "Generowanie hasła"
+
+msgid "Password length"
+msgstr "Długość hasła"
+
+msgid "Number of digits"
+msgstr "Liczba cyfr"
+
+msgid "Number of special characters"
+msgstr "Liczba znaków specjalnych"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Generate"
+msgstr "Generuj"
+
+msgid "Generated password"
+msgstr "Wygenerowane hasło"
+
+msgid "Generate again"
+msgstr "Generuj ponownie"
+
+msgid "Accept"
+msgstr "Akceptuj"
+
