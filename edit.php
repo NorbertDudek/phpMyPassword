@@ -53,8 +53,8 @@ else {
                                 <input id="password" type="password" class="form-control" name="password" maxlength="256" value="<?php echo $password; ?>">
                             </span>
                             <a href="#" class="col-sm-1 btn btn-sm" role="button" id="showpassword"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a href="#" class="col-sm-1 btn btn-sm" role="button" id="genpassword"><span class="glyphicon glyphicon-lock"></span></span></a>
-                            <a href="#" class="col-sm-1 btn btn-sm" role="button" id="copytocclip"><span class="glyphicon glyphicon-link"></span></span></a>
+                            <a href="#" class="col-sm-1 btn btn-sm" role="button" id="genpassword"><span class="glyphicon glyphicon-random"></span></span></a>
+                            <a href="#" class="col-sm-1 btn btn-sm" role="button" id="copytocclip"><span class="glyphicon glyphicon-share"></span></span></a>
                         </div>
 					</div>
 					<div class="form-group">
