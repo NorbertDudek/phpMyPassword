@@ -35,6 +35,11 @@ if ($password != $confirm_password) {
 	exit;
 }
 
+if (is_same_as_current_password($uid, $password)) {
+	header('Location: change_password.php?error=same');
+	exit;
+}
+
 update_user_password($uid, $password);
 set_must_change_password($uid, false);
 

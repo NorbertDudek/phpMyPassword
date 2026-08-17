@@ -24,6 +24,9 @@ $forcePasswordChange = get_must_change_password($uid);
 		<div class="panel panel-primary">
 			<div class="panel-heading"><strong>Edit User</strong></div>
 			<div class="panel-body">
+				<?php if (isset($_GET['message']) && $_GET['message'] != '') { ?>
+				<div class="alert alert-danger"><?php echo htmlspecialchars(trim($_GET['message'], '"')); ?></div>
+				<?php } ?>
 				<form action="do_edit_user.php" method="POST" class="form-horizontal">
 					<input type="hidden" name="uid" value="<?php echo $uid?>">
 					<div class="form-group">

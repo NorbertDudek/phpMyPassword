@@ -81,6 +81,9 @@ textdomain($domain);
 								elseif ($_GET['error'] == 'empty') {
 									echo _("Please enter a new password.");
 								}
+								elseif ($_GET['error'] == 'same') {
+									echo _("The new password must be different from your current password.");
+								}
 								?>
 							</div>
 							<?php } ?>

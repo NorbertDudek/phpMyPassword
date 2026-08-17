@@ -215,3 +215,6 @@ msgstr "Hasła nie są zgodne."
 msgid "Please enter a new password."
 msgstr "Podaj nowe hasło."
 
+msgid "The new password must be different from your current password."
+msgstr "Nowe hasło musi być inne niż dotychczasowe."
+

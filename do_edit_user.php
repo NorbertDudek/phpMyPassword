@@ -24,10 +24,17 @@ else {
 	if ($type == 'local') {
 		if ($new_password != '') {
 			if ($new_password == $confirm_new_password) {
-				update_user_password($uid, $new_password);
+				if (is_same_as_current_password($uid, $new_password)) {
+					header("location: edit_user.php?uid=$uid&message=\"New password must be different from the current password\"");
+					exit;
+				}
+				else {
+					update_user_password($uid, $new_password);
+				}
 			}
 			else {
 				header("location: edit_user.php?uid=$uid&message=\"Passwords do not match\"");
+				exit;
 			}
 		}
 		

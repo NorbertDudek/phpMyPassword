@@ -247,6 +247,22 @@ function update_user_password($uid, $password) {
 
 
 // *****************************************
+// FUNCTION: is_same_as_current_password($uid, $password)
+// *****************************************
+// Returns true if the given plaintext password matches the user's
+// currently stored password hash
+function is_same_as_current_password($uid, $password) {
+	$current_hash = get_sql_value("SELECT password FROM users WHERE uid=$uid");
+
+	if ($current_hash == null) {
+		return false;
+	}
+
+	return (md5($password) == $current_hash);
+}
+
+
+// *****************************************
 // FUNCTION: get_must_change_password($uid)
 // *****************************************
 // Returns true if the user must set a new password before they can
