@@ -14,9 +14,8 @@ if (!get_must_change_password($uid)) {
 
 $type = get_user_type($uid);
 
-// This flow only makes sense for local accounts; LDAP passwords are
-// managed on the LDAP server, not in this application. Just clear the
-// flag so an LDAP user can never get stuck here.
+// This flow only makes sense for local accounts. Just clear the flag
+// so a non-local account (e.g. the superuser) can never get stuck here.
 if ($type != 'local') {
 	set_must_change_password($uid, false);
 	header('Location: index.php');

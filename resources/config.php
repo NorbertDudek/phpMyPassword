@@ -23,16 +23,6 @@ $superuser_password = 'password';
 // Once session idle timeout is reached users will have to login again
 $session_timeout = "900";	// 900 seconds = 15 minutes
 
-// LDAP settings
-$ldap = false;						// Use LDAP? True/False
-// Ignore the rest of the LDAP settings if $ldap=false
-$ldap_server = "server.domain.com";			// LDAP server IP or hostname
-$ldap_port = "389";							// Usually 389 but might be different
-$ldap_domain = "domain";					// Name of LDAP domain
-$ldap_base_dn = "DC=domain,DC=com";			// Base DN for searching
-$ldap_user = "domain\\user";				// User account used to query LDAP (escape backslashes)
-$ldap_password = 'password';				// Password for user account
-
 // Set to false for a more 'professional' look
 $doge = true;
 ?>

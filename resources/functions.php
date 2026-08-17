@@ -23,22 +23,6 @@ if ($IsShowError) {
 // SESSION FUNCTIONS ***********************
 
 // *****************************************
-// FUNCTION: ldap_enabled()
-// *****************************************
-// Is LDAP enabled in config.php?
-function ldap_enabled() {
-	include('resources/config.php');
-	if ($ldap == true) {
-		return true;
-		}
-	else {
-		return false;
-		}
-	}
-//End Function
-
-
-// *****************************************
 // FUNCTION: check_login($user, $password)
 // *****************************************
 // Check for valid credentials
@@ -66,12 +50,6 @@ function check_login($login, $password) {
 		// If type is null, user doesn't exist in DB
 		if ($type == null) {
 			return false;
-			}
-		
-		// LDAP Login
-		if ($type == "ldap") {
-			echo "Login type is LDAP // ";
-			return check_ldap_credentials($login, $password);
 			}
 
 		// Local login
@@ -244,16 +222,6 @@ function edit_permisiongroup($gid, $group_name, $description, $parent) {
 	run_sql_command("UPDATE permisiongroups SET description='$description' WHERE gid=$gid");
 	run_sql_command("UPDATE permisiongroups SET parent='$parent' WHERE gid=$gid");
 	}
-
-
-// *****************************************
-// FUNCTION: add_ldap_user($login)
-// *****************************************
-function add_ldap_user($login) {
-	include("resources/config.php");
-	
-	run_sql_command("INSERT INTO users (login, type) VALUES ('$login', 'ldap')");
-}
 
 
 // *****************************************
@@ -467,67 +435,6 @@ function user_rights() {
 	$admin = get_sql_value("SELECT admin FROM users WHERE uid=$uid");
 
 	return $admin;
-}
-
-
-// *****************************************
-// FUNCTION: check_ldap_credentials($user, $password)
-// *****************************************
-// Check credentials against LDAP server
-function check_ldap_credentials($user, $password) {
-	//Include config.php for LDAP server info
-	include('resources/config.php');
-	
-	//Make sure a password was provided
-	if ($password == '') {
-		return false;
-		}
-	
-	//Connect to LDAP server
-	if (!defined('LDAP_OPT_DIAGNOSTIC_MESSAGE')) {
-		define('LDAP_OPT_DIAGNOSTIC_MESSAGE', 0x0032);
-	}
-	$ldapconn = ldap_connect($ldap_server, $ldap_port) or die("Could not connect to LDAP server!");
-		
-	//Set LDAP options
-	ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
-    ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
-	
-	if ($ldapconn) {
-		//Verify credentials
-		$ldapbind = ldap_bind($ldapconn, $ldap_domain . "\\" . $user, $password);
-		
-		if($ldapbind) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	return false;
-}
-//End function
-
-
-// *****************************************
-// FUNCTION: ldap_user_search($username)
-// *****************************************
-// Searches for LDAP user
-function ldap_user_search($username) {
-	include('resources/config.php');
-	
-	$oLDAP = ldap_connect($ldap_server,389);
-
-	ldap_set_option($oLDAP, LDAP_OPT_REFERRALS, 0);
-	ldap_set_option($oLDAP, LDAP_OPT_PROTOCOL_VERSION, 3);
-
-	$oDIR = ldap_bind($oLDAP, $ldap_user, $ldap_password);
-
-	$sQuery = '(samaccountname=' . $username . '*)';
-	$oSearch = ldap_search($oLDAP, $ldap_base_dn, $sQuery, array('samaccountname'));
-
-	return ldap_get_entries($oLDAP, $oSearch);
 }
 
 

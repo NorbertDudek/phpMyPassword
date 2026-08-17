@@ -7,11 +7,6 @@ $password = $_POST['password'];
 $admin = $_POST['admin'];
 $force_password_change = checkInPOST('force_password_change');
 
-//Create user (LDAP)
-if ($type == "ldap") {
-	add_ldap_user($login);
-	}
-	
 //Create user (Local)
 if ($type == "local") {
 	add_local_user($login, $password);
