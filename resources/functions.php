@@ -1054,7 +1054,7 @@ function remove_user_from_permisiongroup($gid, $uid) {
 // Share object ID with user UID. Default mode is read-only.
 function share_with_user($gid, $uid, $mode = 'r') {
 	// Check that we aren't already sharing with this user
-	if (get_sql_value("SELECT mode FROM user_permissions WHERE gid=$gid and uid=$uid") == NULL) {
+	if (get_sql_value("SELECT mode FROM user_permissions WHERE id=$gid and uid=$uid") == NULL) {
 		run_sql_command("insert into user_permissions (id, uid, mode) values ('$gid', '$uid', '$mode')");
 		}
 	}
