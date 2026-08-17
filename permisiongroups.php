@@ -3,13 +3,13 @@ $requireadmin = false;
 require_once('header.php');
 ?>
 
-<h2>Permision Groups:</h2>
+<h2><?php echo _("Permision Groups"); ?>:</h2>
 <table class="table table-hover">
 	<thead>
 		<tr>
-			<th>Permision Group Name</th>
-			<th>Description</th>
-			<th>Actions</th>
+			<th><?php echo _("Permision Group Name"); ?></th>
+			<th><?php echo _("Description"); ?></th>
+			<th><?php echo _("Actions"); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -32,8 +32,8 @@ function list_groups($parent, $level = 0) {
 			<tr>
 				<td><?php echo str_repeat('&nbsp;', $level *4); echo $group['name'];?></td>
 				<td><?php echo $group['description'];?></td>
-				<td><a href="edit_permisiongroup.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-primary">Edit</a>
-					<a href="delete_permisiongroup.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-danger">Delete</a>
+				<td><a href="edit_permisiongroup.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-primary"><?php echo _("Edit"); ?></a>
+					<a href="delete_permisiongroup.php?gid=<?php echo $group['gid']; ?>" class="btn btn-xs btn-danger"><?php echo _("Delete"); ?></a>
 				</td>
 			</tr>
 	<?php
@@ -49,7 +49,7 @@ list_groups(0);
 
 	</tbody>
 </table>
-<div><a href="add_permisiongroup.php" class="btn btn-sm btn-primary">Add New Permision Group</a></div>
+<div><a href="add_permisiongroup.php" class="btn btn-sm btn-primary"><?php echo _("Add New Permision Group"); ?></a></div>
 
 <?php
 require_once('footer.php');

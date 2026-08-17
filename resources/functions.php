@@ -1184,4 +1184,38 @@ function getUserLang()
     return $localeToUse;
 }
 
+
+// *****************************************
+// FUNCTION: setup_locale()
+// *****************************************
+// Configures gettext for the current request based on the browser's
+// preferred language. Centralized here (instead of duplicated inline
+// in header.php and change_password.php) because getting this wrong
+// fails silently: gettext just falls back to showing the original
+// English strings with no warning or error, so it's easy to end up
+// with two copies that drift and both stay subtly broken.
+function setup_locale() {
+	$language = getUserLang();
+	putenv("LANG=" . $language);
+	putenv("LANGUAGE=" . $language);
+
+	// setlocale() only succeeds if that exact locale is installed on
+	// the server. Many servers only have the '.UTF-8' variant (or
+	// only the plain name) installed, and setlocale() fails silently
+	// (returns false) rather than warning - so gettext silently keeps
+	// showing English. Try the common variants in order instead of
+	// assuming which one is available.
+	setlocale(LC_ALL, $language . '.UTF-8', $language . '.utf8', $language);
+
+	$domain = "message";
+
+	// Use an absolute path: bindtextdomain() resolves relative paths
+	// against the current working directory, which isn't guaranteed
+	// to be the project root under every SAPI/webserver configuration.
+	bindtextdomain($domain, __DIR__ . '/../locale');
+	bind_textdomain_codeset($domain, 'UTF-8');
+
+	textdomain($domain);
+}
+
 ?>

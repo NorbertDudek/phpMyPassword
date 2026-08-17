@@ -6,7 +6,7 @@ $gid = $_GET['gid'];
 // Check permissions
 if (!(am_i_admin())) {
 	// We don't have permissions!	?>
-	<p class="bg-danger center-block">ACCESS DENIED</p>
+	<p class="bg-danger center-block"><?php echo _("ACCESS DENIED"); ?></p>
 <?php	}
 else {
 ?>

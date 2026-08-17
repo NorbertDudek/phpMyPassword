@@ -30,7 +30,7 @@ require_once('header.php');
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3">&nbsp;</div>
-						<div class="col-sm-6"><input type="submit" class="btn btn-xs btn-primary" value="Add Group"></div>
+						<div class="col-sm-6"><input type="submit" class="btn btn-xs btn-primary" value="<?php echo _("Add group"); ?>"></div>
 					</div>
 				</form>
 			</div>

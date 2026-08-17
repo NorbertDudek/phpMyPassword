@@ -12,16 +12,16 @@ $users = get_user_list();
 	<div class="col-sm-3">&nbsp;</div>
 	<div class="col-sm-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading"><strong>Add Group Member(s):</strong> <?php echo get_group_name($gid);?></div>
+			<div class="panel-heading"><strong><?php echo _("Add Group Member(s)"); ?>:</strong> <?php echo get_group_name($gid);?></div>
 			<div class="panel-body">
 				<form action="do_add_group_member.php" method="POST">
 					<input type="hidden" name="gid" value="<?php echo $gid; ?>">
-					Select a user:					
+					<?php echo _("Select a user"); ?>:					
 					<select class="form-control input-lg" name="uid[]" multiple>
 						<?php foreach ($users as $user) { ?><option value="<?php echo $user['uid'];?>"><?php echo $user['login'];?></option><?php } ?>
 					</select>
-					<p><small><em>Use CTRL+Click to select multiple users.</em></small></p>	
-					<input type="submit" class="btn btn-sm btn-primary" value="Add">
+					<p><small><em><?php echo _("Use CTRL+Click to select multiple users."); ?></em></small></p>	
+					<input type="submit" class="btn btn-sm btn-primary" value="<?php echo _("Add"); ?>">
 				</form>
 			</div>
 		</div>

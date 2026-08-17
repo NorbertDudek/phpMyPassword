@@ -22,66 +22,75 @@ $forcePasswordChange = get_must_change_password($uid);
 	<div class="col-sm-3">&nbsp;</div>
 	<div class="col-sm-6">
 		<div class="panel panel-primary">
-			<div class="panel-heading"><strong>Edit User</strong></div>
+			<div class="panel-heading"><strong><?php echo _("Edit User"); ?></strong></div>
 			<div class="panel-body">
-				<?php if (isset($_GET['message']) && $_GET['message'] != '') { ?>
-				<div class="alert alert-danger"><?php echo htmlspecialchars(trim($_GET['message'], '"')); ?></div>
+				<?php if (isset($_GET['error']) && $_GET['error'] != '') { ?>
+				<div class="alert alert-danger">
+					<?php
+					if ($_GET['error'] == 'mismatch') {
+						echo _("Passwords do not match.");
+					}
+					elseif ($_GET['error'] == 'same') {
+						echo _("The new password must be different from the current password.");
+					}
+					?>
+				</div>
 				<?php } ?>
 				<form action="do_edit_user.php" method="POST" class="form-horizontal">
 					<input type="hidden" name="uid" value="<?php echo $uid?>">
 					<div class="form-group">
-						<label class="control-label col-sm-3">Login:</label>
+						<label class="control-label col-sm-3"><?php echo _("User name"); ?>:</label>
 						<div class="col-sm-9"><p class="form-control-static"><?php echo $login; ?></p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label">Type:</label>
+						<label class="col-sm-3 control-label"><?php echo _("Type"); ?>:</label>
 						<div class="col-sm-9"><p class="form-control-static"><?php echo $type; ?></p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label">Change Password:</label>
+						<label class="col-sm-3 control-label"><?php echo _("Change Password"); ?>:</label>
 						<div class="col-sm-9">
-							<p><input type="password" class="form-control" name="password" placeholder="New Password" maxlength="128" <?php if ($type == "superuser") { echo "disabled"; }?>></p>
-							<p><input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" maxlength="128" <?php if ($type == "superuser") { echo "disabled"; }?>></p>
+							<p><input type="password" class="form-control" name="password" placeholder="<?php echo _("New password"); ?>" maxlength="128" <?php if ($type == "superuser") { echo "disabled"; }?>></p>
+							<p><input type="password" class="form-control" name="confirm_password" placeholder="<?php echo _("Confirm password"); ?>" maxlength="128" <?php if ($type == "superuser") { echo "disabled"; }?>></p>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="force_password_change">Force password change</label>
-						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" id="force_password_change" name="force_password_change" <?php if ($forcePasswordChange) { echo "checked"; }?> <?php if ($type == "superuser") { echo "disabled"; }?>> User must change password on next login</p></div>
+						<label class="col-sm-3 control-label" for="force_password_change"><?php echo _("Force password change"); ?></label>
+						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" id="force_password_change" name="force_password_change" <?php if ($forcePasswordChange) { echo "checked"; }?> <?php if ($type == "superuser") { echo "disabled"; }?>> <?php echo _("User must change password on next login"); ?></p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="admin1">Admin?</label>
+						<label class="col-sm-3 control-label" for="admin1"><?php echo _("Admin?"); ?></label>
 						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" name="admin" <?php if ($is_admin == 1) { echo "checked"; }?>></p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="export">Export</label>
+						<label class="col-sm-3 control-label" for="export"><?php echo _("Export"); ?></label>
 						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" name="export" <?php if ($export  != 0) { echo "checked"; }?>></p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="Password access">Password access</label>
+						<label class="col-sm-3 control-label" for="Password access"><?php echo _("Password access"); ?></label>
 						<div class="col-sm-9">
 							<p class="form-control-static">
-								<input type="checkbox" name="passwordAdd" <?php if ($passwordAdd != 0) { echo "checked"; }?>> Add &nbsp;&nbsp;&nbsp;
-								<input type="checkbox" name="passwordEdit" <?php if ($passwordEdit != 0) { echo "checked"; }?>> Edit &nbsp;&nbsp;&nbsp;
-								<input type="checkbox" name="passwordRemove" <?php if ($passwordRemove != 0) { echo "checked"; }?>> Delete &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="passwordAdd" <?php if ($passwordAdd != 0) { echo "checked"; }?>> <?php echo _("Add"); ?> &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="passwordEdit" <?php if ($passwordEdit != 0) { echo "checked"; }?>> <?php echo _("Edit"); ?> &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="passwordRemove" <?php if ($passwordRemove != 0) { echo "checked"; }?>> <?php echo _("Delete"); ?> &nbsp;&nbsp;&nbsp;
 							</p>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="Group access">Group access</label>
+						<label class="col-sm-3 control-label" for="Group access"><?php echo _("Group access"); ?></label>
 						<div class="col-sm-9">
 							<p class="form-control-static">
-								<input type="checkbox" name="groupAdd" <?php if ($groupAdd != 0) { echo "checked"; }?>> Add &nbsp;&nbsp;&nbsp;
-								<input type="checkbox" name="groupEdit" <?php if ($groupEdit != 0) { echo "checked"; }?>> Edit &nbsp;&nbsp;&nbsp;
-								<input type="checkbox" name="groupRemove" <?php if ($groupRemove != 0) { echo "checked"; }?>> Delete &nbsp;&nbsp;&nbsp;
-								<input type="checkbox" name="groupSee" <?php if ($groupSee != 0) { echo "checked"; }?>> See &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupAdd" <?php if ($groupAdd != 0) { echo "checked"; }?>> <?php echo _("Add"); ?> &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupEdit" <?php if ($groupEdit != 0) { echo "checked"; }?>> <?php echo _("Edit"); ?> &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupRemove" <?php if ($groupRemove != 0) { echo "checked"; }?>> <?php echo _("Delete"); ?> &nbsp;&nbsp;&nbsp;
+								<input type="checkbox" name="groupSee" <?php if ($groupSee != 0) { echo "checked"; }?>> <?php echo _("See"); ?> &nbsp;&nbsp;&nbsp;
 							</p>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3">&nbsp;</div>
 						<div class="col-sm-9">
-							<input type="submit" class="btn btn-sm btn-primary" value="Save Changes">
-							<?php if ($type != "superuser") { ?><a href="delete_user.php?uid=<?php echo $uid;?>" class="btn btn-sm btn-danger">Delete User</a> <?php } ?>
+							<input type="submit" class="btn btn-sm btn-primary" value="<?php echo _("Save changes"); ?>">
+							<?php if ($type != "superuser") { ?><a href="delete_user.php?uid=<?php echo $uid;?>" class="btn btn-sm btn-danger"><?php echo _("Delete User"); ?></a> <?php } ?>
 						</div>
 					</div>
 				</form>

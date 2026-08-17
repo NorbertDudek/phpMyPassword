@@ -24,13 +24,7 @@ if (!get_must_change_password($uid)) {
 }
 
 // Language setup
-$language = getUserLang();
-putenv("LANG=" . $language);
-setlocale(LC_ALL, $language);
-$domain = "message";
-bindtextdomain($domain, "locale");
-bind_textdomain_codeset($domain, 'UTF-8');
-textdomain($domain);
+setup_locale();
 ?>
 <!DOCTYPE html>
 <html lang="en">

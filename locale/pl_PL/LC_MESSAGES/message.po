@@ -218,3 +218,117 @@ msgstr "Podaj nowe hasło."
 msgid "The new password must be different from your current password."
 msgstr "Nowe hasło musi być inne niż dotychczasowe."
 
+msgid "Admin User"
+msgstr "Administrator"
+
+msgid "User must change password on next login"
+msgstr "Użytkownik musi zmienić hasło przy następnym logowaniu"
+
+msgid "Add Local User"
+msgstr "Dodaj lokalnego użytkownika"
+
+msgid "Edit User"
+msgstr "Edytuj użytkownika"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Change Password"
+msgstr "Zmień hasło"
+
+msgid "Force password change"
+msgstr "Wymuś zmianę hasła"
+
+msgid "Admin?"
+msgstr "Administrator?"
+
+msgid "Password access"
+msgstr "Dostęp do haseł"
+
+msgid "Group access"
+msgstr "Dostęp do grup"
+
+msgid "See"
+msgstr "Podgląd"
+
+msgid "Delete User"
+msgstr "Usuń użytkownika"
+
+msgid "The new password must be different from the current password."
+msgstr "Nowe hasło musi być inne niż dotychczasowe."
+
+msgid "User"
+msgstr "Użytkownik"
+
+msgid "Admin"
+msgstr "Administrator"
+
+msgid "Export access"
+msgstr "Dostęp do eksportu"
+
+msgid "Action"
+msgstr "Akcja"
+
+msgid "Remove"
+msgstr "Usuń"
+
+msgid "Add New User"
+msgstr "Dodaj nowego użytkownika"
+
+msgid "Add Group"
+msgstr "Dodaj grupę uprawnień"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Edit Group"
+msgstr "Edytuj grupę uprawnień"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Members"
+msgstr "Członkowie"
+
+msgid "Add Member(s)"
+msgstr "Dodaj członków"
+
+msgid "Remove Member(s)"
+msgstr "Usuń członków"
+
+msgid "Permision Groups"
+msgstr "Grupy uprawnień"
+
+msgid "Permision Group Name"
+msgstr "Nazwa grupy uprawnień"
+
+msgid "Add New Permision Group"
+msgstr "Dodaj nową grupę uprawnień"
+
+msgid "Add Group Member(s)"
+msgstr "Dodaj członków grupy"
+
+msgid "Add Permision Group Member(s)"
+msgstr "Dodaj członków grupy uprawnień"
+
+msgid "Remove Group Member(s)"
+msgstr "Usuń członków grupy"
+
+msgid "Please confirm you would like to remove the following users from this group:"
+msgstr "Potwierdź, że chcesz usunąć następujących użytkowników z tej grupy:"
+
+msgid "Remove Permision Group Member(s)"
+msgstr "Usuń członków grupy uprawnień"
+
+msgid "ACCESS DENIED"
+msgstr "BRAK DOSTĘPU"
+
+msgid "Please confirm you would like to remove the following user:"
+msgstr "Potwierdź, że chcesz usunąć następującego użytkownika:"
+
+msgid "This will NOT remove password entries owned by this user."
+msgstr "Nie spowoduje to usunięcia haseł należących do tego użytkownika."
+
+msgid "Please confirm you would like to remove the following permision group:"
+msgstr "Potwierdź, że chcesz usunąć następującą grupę uprawnień:"
+

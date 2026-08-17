@@ -40,14 +40,7 @@ if (basename($_SERVER['PHP_SELF']) != 'login.php')
 
 /// language
 
-$language = getUserLang();
-putenv("LANG=" . $language); 
-setlocale(LC_ALL, $language);
-$domain = "message";
-bindtextdomain($domain, "locale"); 
-bind_textdomain_codeset($domain, 'UTF-8');
-
-textdomain($domain);
+setup_locale();
 ?>
 
 <!DOCTYPE html>
