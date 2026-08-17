@@ -544,15 +544,17 @@ function get_group_options($gid, $selected = 0, $without_group = 0) {
 	
 	$result = "";
 	$results = get_group_list($gid);
-	foreach ($results as $entry) {
-		$id =  $entry['gid'];
-		if (check_group_permissions($id, get_my_uid()))  {
-			$name = $entry['name'];
-			$selected_op = ($id == $selected ? "selected" : "");
-		
-			if ($id != $without_group) {
-				$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
-				$result = $result .get_group_options($id, $selected, $without_group);
+	if (is_array($results)) {
+		foreach ($results as $entry) {
+			$id =  $entry['gid'];
+			if (check_group_permissions($id, get_my_uid()))  {
+				$name = $entry['name'];
+				$selected_op = ($id == $selected ? "selected" : "");
+			
+				if ($id != $without_group) {
+					$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
+					$result = $result .get_group_options($id, $selected, $without_group);
+				}
 			}
 		}
 	}
@@ -570,14 +572,16 @@ function get_permisiongroup_options($gid, $selected = 0, $without_group = 0) {
 	
 	$result = "";
 	$results = get_permisiongroup_list($gid);
-	foreach ($results as $entry) {
-		$id =  $entry['gid'];
-		$name = $entry['name'];
-		$selected_op = ($id == $selected ? "selected" : "");
-	
-		if ($id != $without_group) {
-			$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
-			$result = $result .get_permisiongroup_options($id, $selected, $without_group);
+	if (is_array($results)) {
+		foreach ($results as $entry) {
+			$id =  $entry['gid'];
+			$name = $entry['name'];
+			$selected_op = ($id == $selected ? "selected" : "");
+		
+			if ($id != $without_group) {
+				$result = $result ."<option value=\"$id\" $selected_op>".get_group_path($id)."</option>";
+				$result = $result .get_permisiongroup_options($id, $selected, $without_group);
+			}
 		}
 	}
 
@@ -960,10 +964,12 @@ function check_group_permissions($id, $uid)  {
 
 	// Check if ID is shared with groups
 	$my_groups = get_permissiongroup_membership($uid);	// Get all groups that uid belongs to
-	foreach ($my_groups as $group) {			// Iterate through all groups
-		$gid = $group['gid'];
-		if (get_sql_value("SELECT id FROM group_permissions WHERE gid='$gid' AND id='$id'") != null) {	// Check if object ID is shared with GID
-			return true;
+	if (is_array($my_groups)) {
+		foreach ($my_groups as $group) {			// Iterate through all groups
+			$gid = $group['gid'];
+			if (get_sql_value("SELECT id FROM group_permissions WHERE gid='$gid' AND id='$id'") != null) {	// Check if object ID is shared with GID
+				return true;
+			}
 		}
 	}
 

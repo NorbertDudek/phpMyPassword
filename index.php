@@ -30,6 +30,9 @@
 
 function show_password($gid, $level, $chain = '') {
 	$results = get_my_passwords($gid);
+	if (!is_array($results)) {
+		return;
+	}
 	foreach ($results as $entry) {
 		$id =  $entry['id'];
 		$name = $entry['name'];
@@ -61,6 +64,9 @@ $grupy_do_podpowiedzi = array();
 function show_group($gid, $level = 0, $chain = '') {
 	global $grupy_do_podpowiedzi;
 	$groups = get_group_list($gid);
+	if (!is_array($groups)) {
+		return;
+	}
 	foreach ($groups as $group) {
 		if (check_group_permissions($group['gid'], get_my_uid()))  {
 			$id = $group['gid'];
