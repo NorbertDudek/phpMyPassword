@@ -56,7 +56,7 @@ $query = "CREATE TABLE IF NOT EXISTS `sessions` (`session_id` varchar(64) NOT NU
 run_init_query($query, $db_user, $db_pass, $db_name);
 $query = "CREATE TABLE IF NOT EXISTS `user_permissions` (`id` int(11) NOT NULL,  `uid` int(11) NOT NULL,  `mode` varchar(2) NOT NULL DEFAULT 'r',  PRIMARY KEY (`id`,`uid`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 run_init_query($query, $db_user, $db_pass, $db_name);
-$query = "CREATE TABLE IF NOT EXISTS `users` (`uid` int(11) NOT NULL AUTO_INCREMENT,  `login` varchar(32) NOT NULL,  `password` varchar(128) DEFAULT NULL,  `type` varchar(5) NOT NULL,  `admin` int(11) NOT NULL DEFAULT '0',  PRIMARY KEY (`uid`),  UNIQUE KEY `login_UNIQUE` (`login`)) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;";
+$query = "CREATE TABLE IF NOT EXISTS `users` (`uid` int(11) NOT NULL AUTO_INCREMENT,  `login` varchar(32) NOT NULL,  `password` varchar(128) DEFAULT NULL,  `type` varchar(5) NOT NULL,  `admin` int(11) NOT NULL DEFAULT '0',  `must_change_password` tinyint(1) NOT NULL DEFAULT '0',  PRIMARY KEY (`uid`),  UNIQUE KEY `login_UNIQUE` (`login`)) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;";
 run_init_query($query, $db_user, $db_pass, $db_name);
 echo " DONE<br>\n";
 

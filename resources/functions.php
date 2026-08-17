@@ -130,6 +130,7 @@ function check_session_login() {
 	}
 	else {
 		update_session_timestamp();
+		enforce_password_change();
 	}
 }
 //END FUNCTION
@@ -273,8 +274,65 @@ function update_user_password($uid, $password) {
 	include("resources/config.php");
 	
 	$pass_enc = md5($password);
-	echo "DEBUG: uid $uid / Endrypted password $pass_enc";
 	run_sql_command("UPDATE users SET password='$pass_enc' WHERE uid=$uid");
+}
+
+
+// *****************************************
+// FUNCTION: get_must_change_password($uid)
+// *****************************************
+// Returns true if the user must set a new password before they can
+// use the application any further
+function get_must_change_password($uid) {
+	// Superuser is defined in config.php, not the users table
+	if ($uid == -1) {
+		return false;
+	}
+
+	return (get_sql_value("SELECT must_change_password FROM users WHERE uid=$uid") == 1);
+}
+
+
+// *****************************************
+// FUNCTION: set_must_change_password($uid, $flag)
+// *****************************************
+// Set (true) or clear (false) the "must change password" flag for user UID
+function set_must_change_password($uid, $flag) {
+	// Superuser is defined in config.php, not the users table
+	if ($uid == -1) {
+		return;
+	}
+
+	$flag = $flag ? 1 : 0;
+	run_sql_command("UPDATE users SET must_change_password=$flag WHERE uid=$uid");
+}
+
+
+// *****************************************
+// FUNCTION: enforce_password_change()
+// *****************************************
+// If the logged in user has been flagged as needing to change their
+// password, redirect them to change_password.php on every page except
+// the small set needed to actually complete that change (or leave).
+function enforce_password_change() {
+	$exempt_pages = array(
+		'change_password.php',
+		'do_change_password.php',
+		'login.php',
+		'do_login.php',
+		'logout.php'
+	);
+
+	if (in_array(basename($_SERVER['PHP_SELF']), $exempt_pages)) {
+		return;
+	}
+
+	$uid = get_my_uid();
+
+	if (get_must_change_password($uid)) {
+		header('Location: change_password.php');
+		exit;
+	}
 }
 
 

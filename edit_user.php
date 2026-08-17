@@ -14,6 +14,7 @@ $groupAdd = get_user_permission($uid) & accGroupAdd;
 $groupEdit = get_user_permission($uid) & accGroupEdit;
 $groupRemove = get_user_permission($uid) & accGroupRemove;
 $groupSee = get_user_permission($uid) & accGroupSee;
+$forcePasswordChange = get_must_change_password($uid);
 ?>
 
 <div class="row">
@@ -39,6 +40,10 @@ $groupSee = get_user_permission($uid) & accGroupSee;
 							<p><input type="password" class="form-control" name="password" placeholder="New Password" maxlength="128" <?php if (($type == "ldap") OR ($type == "superuser")) { echo "disabled"; }?>></p>
 							<p><input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" maxlength="128" <?php if (($type == "ldap") OR ($type == "superuser")) { echo "disabled"; }?>></p>
 						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label" for="force_password_change">Force password change</label>
+						<div class="col-sm-9"><p class="form-control-static"><input type="checkbox" id="force_password_change" name="force_password_change" <?php if ($forcePasswordChange) { echo "checked"; }?> <?php if (($type == "ldap") OR ($type == "superuser")) { echo "disabled"; }?>> User must change password on next login</p></div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label" for="admin1">Admin?</label>

@@ -25,6 +25,10 @@ require_once('header.php');
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3">&nbsp;</div>
+						<div class="col-sm-9"><input type="checkbox" id="local_force_password_change" name="force_password_change"> User must change password on next login</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3">&nbsp;</div>
 						<div class="col-sm-9"><input type="submit" class="btn btn-sm btn-primary" value="Add Local User"></div>
 					</div>
 				</form>

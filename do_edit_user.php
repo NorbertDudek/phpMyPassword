@@ -19,6 +19,7 @@ else {
 	$groupEdit = checkInPOST('groupEdit');
 	$groupRemove = checkInPOST('groupRemove');
 	$groupSee = checkInPOST('groupSee');
+	$forcePasswordChange = checkInPOST('force_password_change');
 	
 	if ($type == 'local') {
 		if ($new_password != '') {
@@ -29,6 +30,8 @@ else {
 				header("location: edit_user.php?uid=$uid&message=\"Passwords do not match\"");
 			}
 		}
+		
+		set_must_change_password($uid, $forcePasswordChange == 'on');
 	}
 	
 	$accGrant = 0;

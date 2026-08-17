@@ -194,3 +194,24 @@ msgstr "Generuj ponownie"
 msgid "Accept"
 msgstr "Akceptuj"
 
+msgid "You must change your password"
+msgstr "Musisz zmienić hasło"
+
+msgid "For security reasons, you must set a new password before you can continue."
+msgstr "Ze względów bezpieczeństwa musisz ustawić nowe hasło, zanim będziesz mógł kontynuować."
+
+msgid "New password"
+msgstr "Nowe hasło"
+
+msgid "Confirm password"
+msgstr "Potwierdź hasło"
+
+msgid "Set new password"
+msgstr "Ustaw nowe hasło"
+
+msgid "Passwords do not match."
+msgstr "Hasła nie są zgodne."
+
+msgid "Please enter a new password."
+msgstr "Podaj nowe hasło."
+
